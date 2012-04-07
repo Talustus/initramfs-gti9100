@@ -10,5 +10,5 @@ echo 5.2 >> /customkernel/property/customkernel.version.name
 echo true >> /customkernel/property/customkernel.bootani.zip 
 echo true >> /customkernel/property/customkernel.bootani.bin 
 echo true >> /customkernel/property/customkernel.cwm 
-echo 5.0.2.7 >> /customkernel/property/customkernel.cwm.version 
+echo 5.5.0.4 >> /customkernel/property/customkernel.cwm.version 
 /sbin/ext/busybox mount -t rootfs -o remount,ro rootfs 

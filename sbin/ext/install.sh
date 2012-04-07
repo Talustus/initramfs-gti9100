@@ -24,7 +24,30 @@ if [ "$install_root" == "on" ];
 then
   if [ -s /system/xbin/su ];
   then
-    echo "Superuser already exists"
+    su1md5sum=`/sbin/busybox md5sum /system/xbin/su | /sbin/busybox awk '{print $1}'`
+    su2md5sum=`/sbin/busybox md5sum /res/misc/payload/su | /sbin/busybox awk '{print $1}'`
+    if [ "${su1md5sum}a" != "${su2md5sum}a" ];
+    then
+    	if [ "$payload_extracted" == "0" ];then
+    	  extract_payload
+    	fi
+    	rm -f /system/bin/su
+    	rm -f /system/xbin/su
+    	mkdir /system/xbin
+    	chmod 755 /system/xbin
+    	cp /res/misc/payload/su /system/xbin/su
+    	chown 0.0 /system/xbin/su
+    	chmod 6755 /system/xbin/su
+    	rm -f /system/app/*uper?ser.apk
+    	rm -f /data/app/*uper?ser.apk
+    	rm -rf /data/dalvik-cache/*uper?ser.apk*
+    	cp /res/misc/payload/Superuser.apk /system/app/Superuser.apk
+    	chown 0.0 /system/app/Superuser.apk
+    	chmod 644 /system/app/Superuser.apk
+	echo "Superuser updated to SuperSU"
+    else    
+	echo "SuperSU already exists"
+    fi
   else
     if [ "$payload_extracted" == "0" ];then
       extract_payload
@@ -43,6 +66,7 @@ then
     cp /res/misc/payload/Superuser.apk /system/app/Superuser.apk
     chown 0.0 /system/app/Superuser.apk
     chmod 644 /system/app/Superuser.apk
+    echo "SuperSU install success..."
   fi
 fi;
 
