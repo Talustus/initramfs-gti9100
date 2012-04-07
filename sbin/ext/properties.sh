@@ -4,7 +4,7 @@ mkdir -p /customkernel/property
 echo true >> /customkernel/property/customkernel.cf-root 
 echo true >> /customkernel/property/customkernel.base.cf-root 
 echo DreamKernel >> /customkernel/property/customkernel.name 
-echo "DreamKernel 0.1" >> /customkernel/property/customkernel.namedisplay 
+echo "DreamKernel 1.0" >> /customkernel/property/customkernel.namedisplay 
 echo 104 >> /customkernel/property/customkernel.version.number 
 echo 5.2 >> /customkernel/property/customkernel.version.name 
 echo true >> /customkernel/property/customkernel.bootani.zip 
