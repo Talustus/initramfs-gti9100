@@ -15,9 +15,22 @@ if [ "$logger" == "off" ];then
 rm -rf /dev/log
 fi
 if [ "$logger" == "on" ];then
-insmod /lib/modules/logger.ko
+# Modul does not load on first insmod
+/sbin/insmod /lib/modules/logger.ko
+/sbin/insmod /lib/modules/logger.ko
 fi
+
+# j4fs should be already loaded?
+#/sbin/insmod /lib/modules/j4fs.ko
+#/sbin/insmod /lib/modules/j4fs.ko
+
 #fm radio, I have no idea why it isn't loaded in init -gm
-insmod /lib/modules/Si4709_driver.ko
+/sbin/insmod /lib/modules/Si4709_driver.ko
+
 # for ntfs automounting
-insmod /lib/modules/fuse.ko
+/sbin/insmod /lib/modules/fuse.ko
+/sbin/insmod /lib/modules/fuse.ko
+
+# for cifs mounts
+/sbin/insmod /lib/modules/cifs.ko
+/sbin/insmod /lib/modules/cifs.ko

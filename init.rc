@@ -142,6 +142,7 @@ on post-fs
     mount rootfs rootfs / ro remount
 
     insmod /lib/modules/j4fs.ko
+    insmod /lib/modules/j4fs.ko
     mount j4fs /dev/block/mmcblk0p4 /mnt/.lfs
 
     # We chown/chmod /cache again so because mount is run as root + defaults

@@ -117,6 +117,7 @@ then
   xzcat /res/misc/payload/ntfs-3g.xz > /system/xbin/ntfs-3g
   chown 0.0 /system/xbin/ntfs-3g
   chmod 755 /system/xbin/ntfs-3g
+  echo 1 > /system/.dream/ntfs-3g-installed
 fi
 
 #rm -rf /res/misc/payload
