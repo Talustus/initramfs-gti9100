@@ -42,7 +42,6 @@ on fs
 on post-fs-data
 # insmod kernel modules
 	insmod /lib/modules/j4fs.ko
-	insmod /lib/modules/j4fs.ko
 	mount j4fs /dev/block/mmcblk0p4 /mnt/.lfs ro
 
 on boot

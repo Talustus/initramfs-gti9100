@@ -2,7 +2,7 @@
 if [ ! -f /data/.dream/efsbackup.tar.gz ];
 then
   mkdir /data/.dream
-  chmod 777 /data/.siyah
+  chmod 777 /data/.dream
   /sbin/busybox tar zcvf /data/.dream/efsbackup.tar.gz /efs
   /sbin/busybox cat /dev/block/mmcblk0p1 > /data/.dream/efsdev-mmcblk0p1.img
   /sbin/busybox gzip /data/.dream/efsdev-mmcblk0p1.img

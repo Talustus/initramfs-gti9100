@@ -129,8 +129,9 @@ fi;
 
 
 # Remount all partitions with noatime
-#for k in $(busybox mount | grep relatime | cut -d " " -f3);
-#do
+for k in $(busybox mount | grep relatime | cut -d " " -f3);
+do
 #sync;
-#busybox mount -o remount,noatime $k;
-#done;
+busybox mount -o remount,noatime $k;
+done;
+
