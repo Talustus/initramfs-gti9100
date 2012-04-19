@@ -1,9 +1,9 @@
 <settingsRoot>
   <settingsTab name="CPU">
-    <settingsPane description="These settings control CFS (Complete Fair Scheduler) Task Scheduler Settings" name="CFS Settings">
+    <!-- settingsPane description="These settings control CFS (Complete Fair Scheduler) Task Scheduler Settings" name="CFS Settings">
       <checkbox description="Disabling GENTLE_FAIR_SLEEPERS may give you better UI responsiveness." name="GENTLE_FAIR_SLEEPERS" action="schedfeat GENTLE_FAIR_SLEEPERS" label="GENTLE_FAIR_SLEEPERS"/>
       <checkbox description="Using ARCH_POWER enables the use of arm topology power functions instead of generic ones." name="ARCH_POWER" action="schedfeat ARCH_POWER" label="ARCH_POWER"/>
-    </settingsPane>
+    </settingsPane -->
     <settingsPane description="The following settings control CPU hotplug parameters. Depending on the following parameters, the second core is enabled or disabled." 
 		name="CPU Hotplug Settings">
        <spinner description="Sets the CPU Hotplug Mode. Hotplug mode will dynamically switch the second core on and off. Using second core always-off or always-on modes will make the other hotplug parameters useless." name="Hotplug Mode" action="secondcore">
@@ -115,7 +115,7 @@
   </settingsTab>
 
   <settingsTab name="Screen">
-    <settingsPane description="Some TouchScreen/Display Settings" name="Screen Settings">
+    <settingsPane description="Brightness Curve settings which modify auto-brightness behavior." name="Brightness Curve">
        <seekBar description="Sets touchscreen move sensitivity (vitalij value)." 
 		name="TouchMove Sensitivity" action="generic /sys/devices/platform/s3c2440-i2c.3/i2c-3/3-004a/mov_hysti" unit=" pixel" min="0" reversed="false" step="1" max="20"/>
        <seekBar description="Setting min_bl higher will result in staying lowest brightness level for brighter conditions" 
@@ -125,11 +125,18 @@
        <seekBar description="Maximum brightness level" 
 		name="max_gamma (default 20)" action="generic /sys/class/misc/brightness_curve/max_gamma" unit="" min="0" reversed="false" step="1" max="20"/>
     </settingsPane>
+    <settingsPane description="Other Settings" name="Other Settings">
+       <seekBar description="User adjustable gamma shift." 
+		name="Gamma Shift" action="generic /sys/devices/platform/samsung-pd.2/s3cfb.0/spi_gpio.3/spi3.0/lcd/panel/user_gamma_adjust" unit="" min="-50" reversed="false" step="1" max="50"/>
+       <seekBar description="Vibration intensity level (default 6)" 
+		name="Vibration Intensity" action="generic /sys/devices/platform/tspdrv/vibrator_level" unit="" min="0" reversed="false" step="1" max="6"/>
+       <!-- checkbox description="Check this to activate BLN without wakelocks. Keep in mind that this setting may prevent backlight notification blinking or any other advanced features to work." name="BLN w/o Wakelock" action="generic /sys/class/misc/backlightnotification/blnww" label="BLN w/o Wakelock"/ -->
+    </settingsPane>
   </settingsTab>
 
   <settingsTab name="Misc">
     <settingsPane description="Misc Settings" name="Misc Settings">
-      <button description="Back up the efs partition" name="BackupEFS" action="efs-backup" label="Backup EFS"/>
+      <!-- button description="Back up the efs partition" name="BackupEFS" action="efs-backup" label="Backup EFS"/ -->
       <checkbox description="Enable or Disable Android Logger (needs restart)" name="Android Logger" action="generic /tmp/logger" label="Android Logger"/>
       <spinner description="This will set the suspend frequency used in ondemand governor to have ondemandX behaviour. This will only be set during early stages of booting (before init.d execution) and can be overriden by later scripts or apps and only effective while ondemand governor is in use." name="Default Ondemand Suspend Freq." action="generic /sys/devices/system/cpu/cpufreq/ondemand/suspend_freq">
              <spinnerItem name="1200MHz" value="1200000"/> 
@@ -137,7 +144,6 @@
              <spinnerItem name="800MHz" value="800000"/> 
              <spinnerItem name="500MHz" value="500000"/> 
              <spinnerItem name="200MHz" value="200000"/> 
-             <spinnerItem name="100MHz" value="100000"/> 
       </spinner>
       <spinner description="This will set the default CPU governor. Default CPU governor will only be set during early stages of booting (before init.d execution) and can be overriden by later scripts or apps." name="Default CPU Governor" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor">
              <spinnerItem name="ondemand" value="ondemand"/> 

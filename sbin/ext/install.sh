@@ -1,21 +1,25 @@
 #!/sbin/busybox sh
+# DreamKernel v1.x Bin installer
+# Script by gokhanmoral 
+# i do not tak any Credits for this ! Talustus
 
 extract_payload()
 {
   payload_extracted=1
-#  chmod 755 /sbin/read_boot_headers
-#  eval $(/sbin/read_boot_headers /dev/block/mmcblk0p5)
-#  load_offset=$boot_offset
-#  load_len=$boot_len
-#  dd bs=512 if=/dev/block/mmcblk0p5 skip=$load_offset count=$load_len | busybox cpio -i
+  chmod 755 /sbin/read_boot_headers
+  eval $(/sbin/read_boot_headers /dev/block/mmcblk0p5)
+  load_offset=$boot_offset
+  load_len=$boot_len
+  cd /
+  dd bs=512 if=/dev/block/mmcblk0p5 skip=$load_offset count=$load_len | tar x
 }
 
 . /res/customconfig/customconfig-helper
 read_defaults
 read_config
 
-mount -o remount,rw /dev/block/mmcblk0p9 /system
-/sbin/busybox mount rootfs / -o remount,rw
+mount -o remount,rw /system
+/sbin/busybox mount -t rootfs -o remount,rw rootfs
 payload_extracted=0
 
 cd /
@@ -24,30 +28,7 @@ if [ "$install_root" == "on" ];
 then
   if [ -s /system/xbin/su ];
   then
-    su1md5sum=`/sbin/busybox md5sum /system/xbin/su | /sbin/busybox awk '{print $1}'`
-    su2md5sum=`/sbin/busybox md5sum /res/misc/payload/su | /sbin/busybox awk '{print $1}'`
-    if [ "${su1md5sum}a" != "${su2md5sum}a" ];
-    then
-    	if [ "$payload_extracted" == "0" ];then
-    	  extract_payload
-    	fi
-    	rm -f /system/bin/su
-    	rm -f /system/xbin/su
-    	mkdir /system/xbin
-    	chmod 755 /system/xbin
-    	cp /res/misc/payload/su /system/xbin/su
-    	chown 0.0 /system/xbin/su
-    	chmod 6755 /system/xbin/su
-    	rm -f /system/app/*uper?ser.apk
-    	rm -f /data/app/*uper?ser.apk
-    	rm -rf /data/dalvik-cache/*uper?ser.apk*
-    	cp /res/misc/payload/Superuser.apk /system/app/Superuser.apk
-    	chown 0.0 /system/app/Superuser.apk
-    	chmod 644 /system/app/Superuser.apk
-	echo "Superuser updated to SuperSU"
-    else    
-	echo "SuperSU already exists"
-    fi
+    echo "Superuser already exists"
   else
     if [ "$payload_extracted" == "0" ];then
       extract_payload
@@ -56,17 +37,16 @@ then
     rm -f /system/xbin/su
     mkdir /system/xbin
     chmod 755 /system/xbin
-    cp /res/misc/payload/su /system/xbin/su
+    xzcat /res/misc/payload/su.xz > /system/xbin/su
     chown 0.0 /system/xbin/su
     chmod 6755 /system/xbin/su
 
     rm -f /system/app/*uper?ser.apk
     rm -f /data/app/*uper?ser.apk
     rm -rf /data/dalvik-cache/*uper?ser.apk*
-    cp /res/misc/payload/Superuser.apk /system/app/Superuser.apk
+    xzcat /res/misc/payload/Superuser.apk.xz > /system/app/Superuser.apk
     chown 0.0 /system/app/Superuser.apk
     chmod 644 /system/app/Superuser.apk
-    echo "SuperSU install success..."
   fi
 fi;
 
@@ -80,7 +60,7 @@ then
   rm /data/dalvik-cache/*CWMManager.apk*
   rm /data/app/eu.chainfire.cfroot.cwmmanager*.apk
 
-  cp /res/misc/payload/CWMManager.apk /system/app/CWMManager.apk
+  xzcat /res/misc/payload/CWMManager.apk.xz > /system/app/CWMManager.apk
   chown 0.0 /system/app/CWMManager.apk
   chmod 644 /system/app/CWMManager.apk
   mkdir /system/.dream
@@ -109,6 +89,8 @@ romtype=`cat /proc/sys/kernel/rom_feature_set`
 #fi
 
 echo "ntfs-3g..."
+mkdir /mnt/ntfs
+mount -t tmpfs tmpfs /mnt/ntfs
 if [ ! -s /system/xbin/ntfs-3g ];
 then
   if [ "$payload_extracted" == "0" ];then
@@ -121,5 +103,5 @@ fi
 
 #rm -rf /res/misc/payload
 
-/sbin/busybox mount rootfs / -o remount,ro
-mount -o remount,ro /dev/block/mmcblk0p9 /system
+/sbin/busybox mount -t rootfs -o remount,ro rootfs
+mount -o remount,ro /system

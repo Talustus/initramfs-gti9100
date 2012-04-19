@@ -5,7 +5,38 @@
 #exec >>/data/user.log
 #exec 2>&1
 
-/sbin/busybox sh /sbin/ext/modules.sh
+. /res/customconfig/customconfig-helper
+read_defaults
+read_config
+
+mkdir /data/.dream
+chmod 777 /data/.dream
+[ ! -f /data/.dream/default.profile ] && cp /res/customconfig/default.profile /data/.dream
+[ ! -f /data/.dream/battery.profile ] && cp /res/customconfig/battery.profile /data/.dream
+[ ! -f /data/.dream/performance.profile ] && cp /res/customconfig/performance.profile /data/.dream
+
+if [ "$logger" == "on" ];then
+insmod /lib/modules/logger.ko
+fi
+
+# disable debugging on some modules
+if [ "$logger" == "off" ];then
+  rm -rf /dev/log
+  echo 0 > /sys/module/ump/parameters/ump_debug_level
+  echo 0 > /sys/module/mali/parameters/mali_debug_level
+  echo 0 > /sys/module/kernel/parameters/initcall_debug
+  echo 0 > /sys//module/lowmemorykiller/parameters/debug_level
+  echo 0 > /sys/module/wakelock/parameters/debug_mask
+  echo 0 > /sys/module/userwakelock/parameters/debug_mask
+  echo 0 > /sys/module/earlysuspend/parameters/debug_mask
+  echo 0 > /sys/module/alarm/parameters/debug_mask
+  echo 0 > /sys/module/alarm_dev/parameters/debug_mask
+  echo 0 > /sys/module/binder/parameters/debug_mask
+  echo 0 > /sys/module/xt_qtaguid/parameters/debug_mask
+fi
+
+# for ntfs automounting
+insmod /lib/modules/fuse.ko
 
 #/sbin/busybox sh /sbin/ext/busybox.sh
 
@@ -19,7 +50,7 @@
 ##### Early-init phase tweaks #####
 /sbin/busybox sh /sbin/ext/tweaks.sh
 
-/sbin/busybox mount rootfs / -o remount,ro
+/sbin/busybox mount -t rootfs -o remount,ro rootfs
 
 ##### EFS Backup #####
 (
@@ -28,9 +59,12 @@ sleep 30
 /sbin/busybox sh /sbin/ext/efs-backup.sh
 ) &
 
+# apply ExTweaks defaults
+/res/uci.sh apply &
+
 ##### init scripts #####
 (
-sleep 12
+sleep 10
 /sbin/busybox sh /sbin/ext/run-init-scripts.sh
 )&
 
