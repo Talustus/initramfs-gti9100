@@ -108,10 +108,10 @@ on fs
     # Mount /system rw first to give the filesystem a chance to save a checkpoint
     mount ext4 /res/dev/system /system noatime wait ro
     
-    # verfiy filesystem (UMS)
+    # verify filesystem (UMS)
     exec sformat /dev/block/mmcblk0p11 vfat
     # make sure sdcard is mounted because we may have our data and cache partitions on it
-    mount vfat /dev/block/mmcblk0p11 /mnt/sdcard wait utf8
+    mount vfat /dev/block/mmcblk0p11 /mnt/.secondrom wait utf8
 
     exec sfsck /res/dev/cache ext4
     mount ext4 loop@/res/dev/cache /cache nosuid nodev noatime wait
@@ -248,7 +248,7 @@ on post-fs-data
 	chmod 0774 /data/system/databases/drmdatabase.db	
 
 	#Code changes for GB-> ICS upgrade for U1/T1 models ...Moving .db file .. ends	
-	
+
 #SISO-PLAYREADY-CHANGES
 #DRM directory creation
     mkdir /system/etc/security/.drm 0775
@@ -625,7 +625,7 @@ on property:persist.sys.storage_preload=1
 
 on property:persist.sys.storage_preload=0
     exec /system/bin/umount /preload
-	
+
 
 # Used to disable USB when switching states
 on property:sys.usb.config=none
