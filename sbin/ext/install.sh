@@ -101,6 +101,22 @@ then
   chmod 755 /system/xbin/ntfs-3g
 fi
 
+# NEW .. IPv6 Tunnel support
+echo "IPv6Tun Support"
+if [ -f /system/.dream/.noipv6 ];
+then
+  echo 0 > /system/.dream/ipv6-installed
+else
+  if [ ! -f /system/app/IPv6Tun.apk ];
+  then
+    # rm /system/app/IPv6Tun.apk
+    xzcat /res/misc/payload/IPv6Tun.apk.xz > /system/app/IPv6Tun.apk
+    chown 0.0 /system/app/IPv6Tun.apk
+    chmod 644 /system/app/IPv6Tun.apk
+    echo 1 > /system/.dream/ipv6-installed
+  fi
+fi
+
 #rm -rf /res/misc/payload
 
 /sbin/busybox mount -t rootfs -o remount,ro rootfs
