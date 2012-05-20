@@ -7,10 +7,16 @@
 
 mkdir /data/.dream
 chmod 777 /data/.dream
+ccxmlsum=`md5sum /res/customconfig/customconfig.xml | awk '{print $1}'`
+if [ "a${ccxmlsum}" != "a`cat /data/.dream/.ccxmlsum`" ];
+then
+  rm -f /data/.dream/*.profile
+  rm -f /data/.dream/.active.profile
+  echo ${ccxmlsum} > /data/.dream/.ccxmlsum
+fi
 [ ! -f /data/.dream/default.profile ] && cp /res/customconfig/default.profile /data/.dream
 [ ! -f /data/.dream/battery.profile ] && cp /res/customconfig/battery.profile /data/.dream
 [ ! -f /data/.dream/performance.profile ] && cp /res/customconfig/performance.profile /data/.dream
-
 
 . /res/customconfig/customconfig-helper
 read_defaults
@@ -19,21 +25,27 @@ read_config
 ## change cpu step counts
 case "${cpustepcount}" in
   5)
+    echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     echo 1200 1000 800 500 200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     ;;
   6)
+    echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     echo 1400 1200 1000 800 500 200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     ;;
   7)
+    echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     echo 1500 1400 1200 1000 800 500 200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     ;;
   8)
+    echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     echo 1600 1400 1200 1000 800 500 200 100 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     ;;
   9)
+    echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     echo 1600 1500 1400 1200 1000 800 500 200 100 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     ;;
   18)
+    echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     echo 1600 1500 1400 1300 1200 1100 1000 900 800 700 600 500 400 300 200 100 50 25 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     ;;
 esac;
@@ -68,7 +80,8 @@ insmod /lib/modules/fuse.ko
 
 /sbin/busybox sh /sbin/ext/install.sh
 
-## run this because user may have chosen not to install root at boot but he may need it later and install it using ExTweaks
+## run this because user may have chosen not to install root at boot
+## but he may need it later and install it using ExTweaks
 /sbin/busybox sh /sbin/ext/su-helper.sh
 
 ##### Early-init phase tweaks #####
@@ -84,11 +97,10 @@ sleep 30
 ) &
 
 # apply ExTweaks defaults
-/res/uci.sh apply &
+/res/uci.sh apply
 
 ##### init scripts #####
 (
-sleep 10
 /sbin/busybox sh /sbin/ext/run-init-scripts.sh
 )&
 
