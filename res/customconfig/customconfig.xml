@@ -12,13 +12,13 @@
              <spinnerItem name="Second core always-on" value="always-on"/> 
        </spinner>
        <seekBar description="second core will be enabled when the load goes above this threshold (default is 30)"
-                name="load_h0" action="generic /sys/module/stand_hotplug/parameters/load_h0" unit="%" min="0" reversed="false" step="1" max="100"/>
+                name="load_h0" action="generic /sys/module/stand_hotplug/parameters/load_h0" unit="%" min="0" reversed="false" step="1" max="35"/>
        <seekBar description="second core will be disabled when the load goes below this threshold (default is 20)"
-                name="load_l1" action="generic /sys/module/stand_hotplug/parameters/load_l1" unit="%" min="0" reversed="false" step="1" max="100"/>
+                name="load_l1" action="generic /sys/module/stand_hotplug/parameters/load_l1" unit="%" min="0" reversed="false" step="1" max="35"/>
        <seekBar description="(default is 2)"
                 name="min_rq" action="generic /sys/module/stand_hotplug/parameters/min_rq" unit="" min="0" reversed="false" step="1" max="2"/>
        <seekBar description="(default is 20)"
-                name="load_rq" action="generic /sys/module/stand_hotplug/parameters/load_rq" unit="%" min="5" reversed="false" step="1" max="100"/>
+                name="load_rq" action="generic /sys/module/stand_hotplug/parameters/load_rq" unit="%" min="5" reversed="false" step="1" max="35"/>
        <seekBar description="Sets hot plug sampling intervals for screen-on state (default is 100)"
                 name="rate" action="generic /sys/module/stand_hotplug/parameters/rate" unit=" jiffies" min="50" reversed="false" step="50" max="1000"/>
        <seekBar description="Sets the frequency below which second core will not be turned on, regardless of thresholds. (default: 100000)" 
@@ -37,15 +37,22 @@
             name="sched_mc" action="generic /sys/devices/system/cpu/sched_mc_power_savings" unit="" min="0" reversed="false" step="1" max="2"/>
     </settingsPane>
 
-    <settingsPane description="" 
-		name="CPU Stepping Settings">
+    <settingsPane description=""
+		name="CPU Step Count + Undervolting">
       <spinner description="This setting will change CPU step count (Restart required)." name="CPU Step Count" action="generic /tmp/cpustepcount">
-             <spinnerItem name="5 (Samsung default)" value="5"/> 
-             <spinnerItem name="6 (SiyahKernel 3.x default)" value="6"/> 
-             <spinnerItem name="7 (6-step + 1500MHz)" value="7"/> 
-             <spinnerItem name="8 (SiyahKernel 2.x default)" value="8"/> 
-             <spinnerItem name="9 (8-step + 1500MHz)" value="9"/> 
-             <spinnerItem name="18 (All available)" value="18"/> 
+             <spinnerItem name="5 (200-500-800-1000-1200MHz)" value="5"/>
+             <spinnerItem name="6 (5-steps + 1400MHz)" value="6"/>
+             <spinnerItem name="7 (6-steps + 1500MHz)" value="7"/>
+             <spinnerItem name="8 (6-steps + 100MHz + 1600MHz)" value="8"/>
+             <spinnerItem name="9 (8-step + 1500MHz)" value="9"/>
+             <spinnerItem name="18 (All available)" value="18"/>
+      </spinner>
+      <spinner description="Sets the CPU undervolting value which will be apploed during boot time only. It will not have any effect until you restart your device. Remember: if you change this value and your device doesn't boot you will have to reset extweaks settings using CWM recovery. This value will be applied to all CPU steps before any script or app execution. If you use any script or voltage control app this setting may be overriden by those." name="CPU Undervolting" action="generic /tmp/cpu_undervolting">
+             <spinnerItem name="No Undervolting" value="0"/>
+             <spinnerItem name=" -25 mV" value="-25"/>
+             <spinnerItem name=" -50 mV" value="-50"/>
+             <spinnerItem name=" -75 mV" value="-75"/>
+             <spinnerItem name="-100 mV" value="-100"/>
       </spinner>
     </settingsPane>
 
@@ -120,22 +127,55 @@
     <settingsPane description="Brightness Curve settings which modify auto-brightness behavior." name="Brightness Curve">
        <seekBar description="Sets touchscreen move sensitivity (vitalij value)." 
 		name="TouchMove Sensitivity" action="generic /sys/devices/platform/s3c2440-i2c.3/i2c-3/3-004a/mov_hysti" unit=" pixel" min="0" reversed="false" step="1" max="20"/>
-       <seekBar description="Setting min_bl higher will result in staying lowest brightness level for brighter conditions" 
-		name="min_bl (default 40)" action="generic /sys/class/misc/brightness_curve/min_bl" unit="" min="0" reversed="false" step="10" max="150"/>
-       <seekBar description="Minimum brightness level" 
-		name="min_gamma (default 0)" action="generic /sys/class/misc/brightness_curve/min_gamma" unit="" min="0" reversed="false" step="1" max="20"/>
-       <seekBar description="Maximum brightness level" 
-		name="max_gamma (default 20)" action="generic /sys/class/misc/brightness_curve/max_gamma" unit="" min="0" reversed="false" step="1" max="20"/>
+       <seekBar description="Setting min_bl higher will result in staying lowest brightness level for brighter conditions (default 30)" 
+		name="min_bl" action="generic /sys/class/misc/brightness_curve/min_bl" unit="" min="0" reversed="false" step="10" max="150"/>
+       <seekBar description="Minimum brightness level (default 0)" 
+		name="min_gamma" action="generic /sys/class/misc/brightness_curve/min_gamma" unit="" min="0" reversed="false" step="1" max="24"/>
+       <seekBar description="Maximum brightness level (default 24)" 
+		name="max_gamma" action="generic /sys/class/misc/brightness_curve/max_gamma" unit="" min="0" reversed="false" step="1" max="24"/>
     </settingsPane>
     <settingsPane description="Other Settings" name="Other Settings">
        <seekBar description="User adjustable gamma shift." 
-		name="Gamma Shift" action="generic /sys/devices/platform/samsung-pd.2/s3cfb.0/spi_gpio.3/spi3.0/lcd/panel/user_gamma_adjust" unit="" min="-50" reversed="false" step="1" max="50"/>
+		name="Gamma Shift" action="generic /sys/devices/platform/samsung-pd.2/s3cfb.0/spi_gpio.3/spi_master/spi3/spi3.0/lcd/panel/user_gamma_adjust" unit="" min="-50" reversed="false" step="5" max="50"/>
        <seekBar description="Vibration intensity level (default 6)" 
 		name="Vibration Intensity" action="generic /sys/devices/platform/tspdrv/vibrator_level" unit="" min="0" reversed="false" step="1" max="6"/>
-       <!-- checkbox description="Check this to activate BLN without wakelocks. Keep in mind that this setting may prevent backlight notification blinking or any other advanced features to work." name="BLN w/o Wakelock" action="generic /sys/class/misc/backlightnotification/blnww" label="BLN w/o Wakelock"/ -->
     </settingsPane>
   </settingsTab>
-
+  <settingsTab name="BLN">
+    <settingsPane description="BackLightNotification and Touchkey related Settings" name="BackLightNotification">
+       <checkbox description="BackLightNotification" name="BLN" action="generic /sys/class/misc/notification/notification_enabled" label="BLN"/>
+       <spinner description="Notification timeout. 0: disabled" name="notification_timeout" action="generic /sys/class/misc/notification/notification_timeout">
+             <spinnerItem name="Never timeout" value="0"/>
+             <spinnerItem name="1 minute" value="60000"/>
+             <spinnerItem name="3 minutes" value="180000"/>
+             <spinnerItem name="5 minutes" value="300000"/>
+             <spinnerItem name="10 minutes" value="600000"/>
+             <spinnerItem name="20 minutes" value="12000000"/>
+             <spinnerItem name="30 minutes" value="18000000"/>
+             <spinnerItem name="60 minutes" value="36000000"/>
+             <spinnerItem name="120 minutes" value="72000000"/>
+       </spinner>
+       <spinner description="This setting will set led behavior in BLN." name="BLN Effect" action="bln_effect">
+             <spinnerItem name="Steady" value="0"/>
+             <spinnerItem name="Breathing" value="1"/>
+             <spinnerItem name="Blinking" value="2"/>
+       </spinner>
+       <spinner description="Led timeout. Leave it disabled if your ROM already has led timeout support. In CM9, if you have lights enabled screen brightness changes may trigger lights on. It is normal. If you want them to stay disabled you have to disable leds in CM9 menu." name="led_timeout" action="generic /sys/class/misc/notification/led_timeout">
+             <spinnerItem name="Disabled" value="0"/>
+             <spinnerItem name="1.5 sec" value="1500"/>
+             <spinnerItem name="3 sec" value="3000"/>
+             <spinnerItem name="6 sec" value="6000"/>
+             <spinnerItem name="15 sec" value="15000"/>
+             <spinnerItem name="30 sec" value="30000"/>
+             <spinnerItem name="60 sec" value="60000"/>
+       </spinner>
+       <checkbox description="Led fadeout effect. If you are on a Samsung ROM, you need to set touchkey leds to always on or always off and use led timeout in ExTweaks." name="led-fadeout" action="generic /sys/class/misc/notification/led_fadeout" label="led-fadeout"/>
+       <checkbox description="Selecting this will activate turning touckey leds on when you touch the screen (only when led timeout is enabled)." name="Leds on with touch" action="generic /sys/class/misc/notification/led_on_touch" label="led-on-touch"/>
+       <button description="Use this button to test bln. BLN will be active after you turn the screen off." name="Test BLN" action="test-bln" label="Test BLN"/>
+       <seekBar description="Controls touchpad led voltage level (default: 3000)" 
+		name="Led Voltage Level" action="generic /sys/devices/virtual/sec/sec_touchkey/touchkey_brightness" unit=" mV" min="2500" reversed="false" step="50" max="3300"/>
+    </settingsPane>
+  </settingsTab>
   <settingsTab name="Misc">
     <settingsPane description="Misc Settings" name="Misc Settings">
       <!-- button description="Back up the efs partition" name="BackupEFS" action="efs-backup" label="Backup EFS"/ -->
@@ -148,11 +188,13 @@
              <spinnerItem name="200MHz" value="200000"/> 
       </spinner -->
       <spinner description="This will set the default CPU governor. Default CPU governor will only be set during early stages of booting (before init.d execution) and can be overriden by later scripts or apps." name="Default CPU Governor" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor">
-             <spinnerItem name="ondemand" value="ondemand"/> 
-             <spinnerItem name="conservative" value="conservative"/> 
-             <spinnerItem name="lulzactive" value="lulzactive"/> 
-             <spinnerItem name="smartassV2" value="smartassV2"/> 
-             <spinnerItem name="interactive" value="interactive"/> 
+             <spinnerItem name="pegasusq" value="pegasusq"/>
+             <spinnerItem name="ondemand" value="ondemand"/>
+             <spinnerItem name="conservative" value="conservative"/>
+             <spinnerItem name="lulzactive" value="lulzactive"/>
+             <spinnerItem name="smartassV2" value="smartassV2"/>
+             <spinnerItem name="interactive" value="interactive"/>
+	      <spinnerItem name="hoplug" value="hotplug"/>
       </spinner>
       <spinner description="This will set the default I/O scheduler. Default I/O scheduler will only be set during early stages of booting (before init.d execution) and can be overriden by later scripts or apps." name="Default I/O Scheduler" action="generic /sys/block/mmcblk0/queue/scheduler">
              <spinnerItem name="sio" value="sio"/> 
@@ -174,4 +216,5 @@
       <checkbox description="If checked, installs root on the next restart." name="Auto-Install Root" action="generic /tmp/install_root" label="Auto-Install Root"/>
     </settingsPane>
   </settingsTab>
+
 </settingsRoot>
