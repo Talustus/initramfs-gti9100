@@ -35,7 +35,7 @@ loglevel 3
 # but someday that may change.
     symlink /system/vendor /vendor
 
-#add booting sound property
+# add booting sound property
     setprop audioflinger.bootsnd 1
 
 # Create cgroup mount point for cpu accounting
@@ -47,7 +47,7 @@ loglevel 3
     mkdir /data 0771 system system
     mkdir /cache 0770 system cache
     mkdir /config 0500 root root
-	mkdir /preload 0771 system system
+    mkdir /preload 0771 system system
 
     # Directory for putting things only root should see.
     mkdir /mnt/secure 0700 root root
@@ -137,8 +137,8 @@ on post-fs
     # once everything is setup, no need to modify /
     mount rootfs rootfs / ro remount
 
-#    insmod /lib/modules/j4fs.ko
-#    mount j4fs /dev/block/mmcblk0p4 /mnt/.lfs
+    insmod /lib/modules/j4fs.ko
+    mount j4fs /dev/block/mmcblk0p4 /mnt/.lfs
 
     # We chown/chmod /cache again so because mount is run as root + defaults
     chown system cache /cache
