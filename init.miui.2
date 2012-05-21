@@ -143,6 +143,7 @@ on post-fs
     mount j4fs /dev/block/mmcblk0p4 /mnt/.lfs
 
     # We chown/chmod /cache again so because mount is run as root + defaults
+    mkdir /cache/recovery 0770
     chown system cache /cache
     chmod 0770 /cache
 

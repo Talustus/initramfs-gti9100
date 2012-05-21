@@ -112,7 +112,7 @@ on fs
     mount ext4 /res/dev/cache /cache nosuid nodev noatime wait
 
     mkdir /efs
-    #mount rfs /dev/block/mmcblk0p1 /efs nosuid nodev check=no
+    # mount rfs /dev/block/mmcblk0p1 /efs nosuid nodev check=no
     exec sfsck /dev/block/mmcblk0p1 ext4
     mount ext4 /dev/block/mmcblk0p1 /efs nosuid nodev noatime wait
     chown radio system /efs
@@ -145,6 +145,7 @@ on post-fs
     chmod 0770 /cache
 
     # This may have been created by the recovery system with odd permissions
+    mkdir /cache/recovery 0770
     chown system cache /cache/recovery
     chmod 0770 /cache/recovery
 
