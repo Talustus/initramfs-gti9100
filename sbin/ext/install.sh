@@ -42,8 +42,13 @@ then
     chmod 6755 /system/xbin/su
 
     rm -f /system/app/*uper?ser.apk
+    rm -f /system/app/?uper?u.apk
+    rm -f /system/app/*chainfire?supersu*.apk
     rm -f /data/app/*uper?ser.apk
+    rm -f /data/app/?uper?u.apk
+    rm -f /data/app/*chainfire?supersu*.apk
     rm -rf /data/dalvik-cache/*uper?ser.apk*
+    rm -rf /data/dalvik-cache/*chainfire?supersu*.apk*
     xzcat /res/misc/payload/Superuser.apk.xz > /system/app/Superuser.apk
     chown 0.0 /system/app/Superuser.apk
     chmod 644 /system/app/Superuser.apk
@@ -88,18 +93,16 @@ romtype=`cat /proc/sys/kernel/rom_feature_set`
 #fi
 #fi
 
-#echo "ntfs-3g..."
-#mkdir /mnt/ntfs
-#mount -t tmpfs tmpfs /mnt/ntfs
-#if [ ! -s /system/xbin/ntfs-3g ];
-#then
-#  if [ "$payload_extracted" == "0" ];then
-#    extract_payload
-#  fi
-#  xzcat /res/misc/payload/ntfs-3g.xz > /system/xbin/ntfs-3g
-#  chown 0.0 /system/xbin/ntfs-3g
-#  chmod 755 /system/xbin/ntfs-3g
-#fi
+echo "ntfs-3g..."
+if [ ! -s /system/xbin/ntfs-3g ];
+then
+  if [ "$payload_extracted" == "0" ];then
+    extract_payload
+  fi
+  xzcat /res/misc/payload/ntfs-3g.xz > /system/xbin/ntfs-3g
+  chown 0.0 /system/xbin/ntfs-3g
+  chmod 755 /system/xbin/ntfs-3g
+fi
 
 # NEW .. IPv6 Tunnel support
 echo "IPv6Tun Support"
