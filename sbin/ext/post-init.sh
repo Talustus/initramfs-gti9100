@@ -1,12 +1,14 @@
 #!/sbin/busybox sh
-# Logging
-#/sbin/busybox cp /data/user.log /data/user.log.bak
-#/sbin/busybox rm /data/user.log
-#exec >>/data/user.log
-#exec 2>&1
-
+#
+## Create the kernel data directory
 mkdir /data/.dream
 chmod 777 /data/.dream
+
+## Enable "post-init" Logging do not enable if /sbin/init is already logging ...
+# mv /data/.dream/post-init.log /data/.dream/post-init.log.bak
+# busybox date >/data/.dream/post-init.log
+# exec >>/data/.dream/post-init.log 2>&1
+
 ccxmlsum=`md5sum /res/customconfig/customconfig.xml | awk '{print $1}'`
 if [ "a${ccxmlsum}" != "a`cat /data/.dream/.ccxmlsum`" ];
 then
@@ -22,30 +24,27 @@ fi
 read_defaults
 read_config
 
+## cpu undervolting
+echo "${cpu_undervolting}" > /sys/devices/system/cpu/cpu0/cpufreq/vdd_levels
+
 ## change cpu step counts
 case "${cpustepcount}" in
   5)
-    echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     echo 1200 1000 800 500 200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     ;;
   6)
-    echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     echo 1400 1200 1000 800 500 200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     ;;
   7)
-    echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     echo 1500 1400 1200 1000 800 500 200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     ;;
   8)
-    echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     echo 1600 1400 1200 1000 800 500 200 100 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     ;;
   9)
-    echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     echo 1600 1500 1400 1200 1000 800 500 200 100 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     ;;
   18)
-    echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     echo 1600 1500 1400 1300 1200 1100 1000 900 800 700 600 500 400 300 200 100 50 25 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
     ;;
 esac;
@@ -73,6 +72,9 @@ fi
 
 ## for ntfs automounting
 insmod /lib/modules/fuse.ko
+mkdir /mnt/ntfs
+mount -t tmpfs tmpfs /mnt/ntfs
+chmod 777 /mnt/ntfs
 
 ## /sbin/busybox sh /sbin/ext/busybox.sh
 
