@@ -1,8 +1,18 @@
 #!/sbin/busybox sh
+#
 cd /
 
 busybox mount -t proc proc /proc
 busybox mount -t sysfs sysfs /sys
+
+######################
+## Enable Logging?? ##
+# mv /boot-log.txt /boot-log.bak
+# busybox date >/boot-log.txt
+# exec >>boot-log.txt 2>&1
+#
+echo "Starting System ..."
+
 tar xvf /res/misc/dev.tar
 
 if grep -q bootmode=2 /proc/cmdline ; then
