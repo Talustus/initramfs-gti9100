@@ -25,6 +25,10 @@ rm /cache
 mkdir /cache
 chmod 777 /cache
 mount -t ext4 /dev/block/mmcblk0p7 /cache
+mkdir /cache/recovery
+chmod 770 /cache/recovery
+chown system.cache /cache/recovery
+
 
 cd /
 eval $(/sbin/read_boot_headers /dev/block/mmcblk0p5)
@@ -32,6 +36,14 @@ dd bs=512 if=/dev/block/mmcblk0p5 skip=$recovery_offset count=$recovery_len | xz
 
 # why don't we use thunderbolt scripts in recovery?
 . /sbin/ext/thunderbolt.sh
+
+mount -t vfat /dev/block/mmcblk0p11 /emmc
+mkdir /emmc/.secondrom/
+
+mkdir /secondrom_data
+mkdir /secondrom_cache
+mkdir /secondrom_system
+# mount -t ext4 /emmc/.secondrom/cache.img /secondrom_cache
 
 if /sbin/ext/busybox [ -f /cache/recovery/command ];
 then

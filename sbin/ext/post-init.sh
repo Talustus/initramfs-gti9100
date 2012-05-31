@@ -13,8 +13,11 @@ ccxmlsum=`md5sum /res/customconfig/customconfig.xml | awk '{print $1}'`
 if [ "a${ccxmlsum}" != "a`cat /data/.dream/.ccxmlsum`" ];
 then
   rm -f /data/.dream/*.profile
-  rm -f /data/.dream/.active.profile
   echo ${ccxmlsum} > /data/.dream/.ccxmlsum
+  # force install old superuser on kernel update
+  # mount -o remount,rw /system
+  # rm -f /system/xbin/su
+  # mount -o remount,ro /system
 fi
 [ ! -f /data/.dream/default.profile ] && cp /res/customconfig/default.profile /data/.dream
 [ ! -f /data/.dream/battery.profile ] && cp /res/customconfig/battery.profile /data/.dream

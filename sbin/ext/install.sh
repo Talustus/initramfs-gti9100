@@ -1,6 +1,6 @@
 #!/sbin/busybox sh
 # DreamKernel v1.x Bin installer
-# Script by gokhanmoral 
+# Script by gokhanmoral
 # i do not tak any Credits for this ! Talustus
 
 extract_payload()
@@ -120,7 +120,7 @@ else
   fi
 fi
 
-#rm -rf /res/misc/payload
+rm -rf /res/misc/payload
 
 /sbin/busybox mount -t rootfs -o remount,ro rootfs
 mount -o remount,ro /system

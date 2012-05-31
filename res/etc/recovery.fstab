@@ -1,10 +1,14 @@
-# mount point	fstype		device					device2
-#/boot			emmc		/dev/block/mmcblk0p5
+# mount point		fstype		device					device2
+/boot			emmc		/dev/block/mmcblk0p5
+# recovery not used
 /cache			ext4		/dev/block/mmcblk0p7
 /system		ext4		/dev/block/mmcblk0p9
-/data			ext4		/dev/block/mmcblk0p10	length=-16384
+/data			ext4		/dev/block/mmcblk0p10
 # external
-/sdcard		vfat		/dev/block/mmcblk1p1	/dev/block/mmcblk1
+/sdcard		vfat		/dev/block/mmcblk1
 # internal
 /emmc			vfat		/dev/block/mmcblk0p11
-
+# 2ndROM support
+/secondrom_system	ext4		/dev/block/mmcblk0p12
+/secondrom_cache	ext4		/emmc/.secondrom/cache.img	fs_options=loop,length=104857600
+/secondrom_data	ext4		/emmc/.secondrom/data.img	fs_options=loop,length=2147483648
