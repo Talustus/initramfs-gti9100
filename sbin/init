@@ -7,9 +7,9 @@ busybox mount -t sysfs sysfs /sys
 
 ######################
 ## Enable Logging?? ##
-# mv /boot-log.txt /boot-log.bak
-# busybox date >/boot-log.txt
-# exec >>boot-log.txt 2>&1
+mv /boot-log.txt /boot-log.bak
+busybox date >/boot-log.txt
+exec >>boot-log.txt 2>&1
 #
 echo "Starting System ..."
 
@@ -62,8 +62,10 @@ fi;
 AOSP=0
 MIUI=0
 B2G=0
+S4A=0
 
 [ -d /system/b2g ] && B2G=1
+[ "`/sbin/busybox grep -i android-htc-rev /system/build.prop`" ] && S4A=1
 [ -f /system/framework/framework2.jar ] || AOSP=1
 [ "`/sbin/busybox grep Slim /system/build.prop`" ] && AOSP=1
 [ "`/sbin/busybox grep -i aosp /system/build.prop`" ] && AOSP=1
@@ -76,6 +78,7 @@ B2G=0
 [ "`/sbin/busybox grep -i Oxygen /system/build.prop`" ] && AOSP=1
 [ "`/sbin/busybox grep -i =MIUI /system/build.prop`" ] && MIUI=1
 [ -f /system/framework/framework-miui.jar ] && MIUI=1
+
 
 
 if [ "$B2G" == 1 ];
@@ -100,7 +103,18 @@ then
 patch -p1 < /res/misc/miui.patch
 fi
 
-if [ "$SECONDROM" == "1" ];then
+if [ "$S4A" == 1 ];
+then
+rm /init.rc
+rm /init.rc.2
+mv /res/misc/init.s4a /init.rc
+mv /res/misc/init.s4a.2 /init.rc.2
+rm /sbin/init.samsung
+mv /sbin/init.s4a /sbin/init.samsung
+fi
+
+if [ "$SECONDROM" == "1" ];
+then
   mv /init.smdk4210.rc.2 /init.smdk4210.rc
   mv /init.rc.2 /init.rc
 fi

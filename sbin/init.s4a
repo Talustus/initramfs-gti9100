@@ -1,0 +1,7 @@
+#!/sbin/busybox sh
+
+echo "found HTC-Sense 4 ALL System (BETA), booting up..."
+rm /init
+mv /innt /init
+cd /
+exec /init
