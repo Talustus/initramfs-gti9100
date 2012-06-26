@@ -107,7 +107,7 @@ on fs
 # mount ext4 partitions
     # Mount /system rw first to give the filesystem a chance to save a checkpoint
     mount ext4 /res/dev/system /system noatime wait ro
-    
+
     # verify filesystem (UMS)
     exec sformat /dev/block/mmcblk0p11 vfat
     # make sure sdcard is mounted because we may have our data and cache partitions on it
@@ -248,7 +248,7 @@ on post-fs-data
 	chown system system /data/system/databases/drmdatabase.db
 	chmod 0774 /data/system/databases/drmdatabase.db	
 
-	#Code changes for GB-> ICS upgrade for U1/T1 models ...Moving .db file .. ends	
+	#Code changes for GB-> ICS upgrade for U1/T1 models ...Moving .db file .. ends
 
 #SISO-PLAYREADY-CHANGES
 #DRM directory creation

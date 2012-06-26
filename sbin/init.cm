@@ -6,6 +6,8 @@ export _PATH="$PATH"
 export PATH=/sbin
 
 cd /
+busybox date >>boot-log.txt
+exec >>boot-log.txt 2>&1
 
 rm /init
 mv /innt /init
