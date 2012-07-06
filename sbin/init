@@ -83,34 +83,42 @@ S4A=0
 
 if [ "$B2G" == 1 ];
 then
-patch -p1 < /res/misc/b2g.patch
-mv /sbin/init.b2g /sbin/init.samsung
+  rm /init.rc
+  rm /init.rc.2
+  mv /res/misc/init.b2g /init.rc
+  mv /res/misc/init.b2g.2 /init.rc.2
+  rm /sbin/init.samsung
+  mv /sbin/init.b2g /sbin/init.samsung
 fi;
 
 if [ "$AOSP" == 1 ];
 then
-echo 1 > /proc/sys/kernel/rom_feature_set
-patch -p1 < /res/misc/cm9.patch
-mv /sbin/init.cm /sbin/init.samsung
-rm /init.rc.2
+  echo 1 > /proc/sys/kernel/rom_feature_set
+  /sbin/busybox umount /system
+  rm /sbin/init.samsung
+  mv /sbin/init.cm /sbin/init.samsung
 else
-echo 0 > /proc/sys/kernel/rom_feature_set
-rm /init.smdk4210.rc.2
+  rm /init.smdk4210.rc.2
+  echo 0 > /proc/sys/kernel/rom_feature_set
 fi;
 
 if [ "$MIUI" == 1 ];
 then
-patch -p1 < /res/misc/miui.patch
+  rm /init.rc
+  rm /init.rc.2
+  mv /res/misc/init.miui /init.rc
+  mv /res/misc/init.miui.2 /init.rc.2
+  mv /res/misc/default.prop.miui /default.prop
 fi
 
 if [ "$S4A" == 1 ];
 then
-rm /init.rc
-rm /init.rc.2
-mv /res/misc/init.s4a /init.rc
-mv /res/misc/init.s4a.2 /init.rc.2
-rm /sbin/init.samsung
-mv /sbin/init.s4a /sbin/init.samsung
+  rm /init.rc
+  rm /init.rc.2
+  mv /res/misc/init.s4a /init.rc
+  mv /res/misc/init.s4a.2 /init.rc.2
+  rm /sbin/init.samsung
+  mv /sbin/init.s4a /sbin/init.samsung
 fi
 
 if [ "$SECONDROM" == "1" ];
