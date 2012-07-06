@@ -48,3 +48,5 @@ scaling_min_freq=100000
 usb_mode=default
 GENTLE_FAIR_SLEEPERS=off
 ARCH_POWER=on
+LCD_POWERSAVE=1
+
