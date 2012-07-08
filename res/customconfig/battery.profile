@@ -49,4 +49,4 @@ usb_mode=default
 GENTLE_FAIR_SLEEPERS=off
 ARCH_POWER=on
 LCD_POWERSAVE=1
-
+cfs_tweaks=1
