@@ -14,10 +14,6 @@ if [ "a${ccxmlsum}" != "a`cat /data/.dream/.ccxmlsum`" ];
 then
   rm -f /data/.dream/*.profile
   echo ${ccxmlsum} > /data/.dream/.ccxmlsum
-  # force install old superuser on kernel update
-  # mount -o remount,rw /system
-  # rm -f /system/xbin/su
-  # mount -o remount,ro /system
 fi
 [ ! -f /data/.dream/default.profile ] && cp /res/customconfig/default.profile /data/.dream
 [ ! -f /data/.dream/battery.profile ] && cp /res/customconfig/battery.profile /data/.dream
@@ -64,8 +60,6 @@ if [ "$logger" == "off" ];then
   echo 0 > /sys/module/mali/parameters/mali_debug_level
   echo 0 > /sys/module/kernel/parameters/initcall_debug
   echo 0 > /sys//module/lowmemorykiller/parameters/debug_level
-  echo 0 > /sys/module/wakelock/parameters/debug_mask
-  echo 0 > /sys/module/userwakelock/parameters/debug_mask
   echo 0 > /sys/module/earlysuspend/parameters/debug_mask
   echo 0 > /sys/module/alarm/parameters/debug_mask
   echo 0 > /sys/module/alarm_dev/parameters/debug_mask
