@@ -51,4 +51,5 @@ ARCH_POWER=on
 LCD_POWERSAVE=1
 default_stats=off
 mdnie_shortcut_enabled=on
+negative_screen=1
 cfs_tweaks=1

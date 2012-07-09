@@ -162,9 +162,17 @@
              <spinnerItem name="Enabled" value="1"/> 
              <spinnerItem name="Disabled" value="0"/>
        </spinner>
-	<checkbox description="Enable inverting the screen colors by quickly pressing Home button 4 times" name="mDNIe Negative Toggle" action="generic01 /sys/module/gpio_keys/parameters/mdnie_shortcut_enabled" label="mDNIe Negative Toggle"/>
+	<checkbox description="Enable inverting the screen colors by quickly pressing Home button several times (Count can be configured below)" name="mDNIe Negative Toggle" action="generic01 /sys/module/gpio_keys/parameters/mdnie_shortcut_enabled" label="mDNIe Negative Toggle"/>
+	<spinner description="Negative Color, Screen effect settings, Fast Click Home for number of times configured to activate MOD" 
+		name="Negative Screen inverting." action="negative_screen">
+		<spinnerItem name="Set 4 Clicks (default)" value="1"/>
+		<spinnerItem name="Set 5 Clicks" value="2"/>
+		<spinnerItem name="Set 6 Clicks" value="3"/>
+		<spinnerItem name="Feature Disabled" value="4"/>
+	</spinner>
     </settingsPane>
   </settingsTab>
+
   <settingsTab name="BLN">
     <settingsPane description="BackLightNotification and Touchkey related Settings" name="BackLightNotification">
        <checkbox description="BackLightNotification" name="BLN" action="generic /sys/class/misc/notification/notification_enabled" label="BLN"/>
