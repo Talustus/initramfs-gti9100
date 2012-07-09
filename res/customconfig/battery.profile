@@ -49,4 +49,6 @@ usb_mode=default
 GENTLE_FAIR_SLEEPERS=off
 ARCH_POWER=on
 LCD_POWERSAVE=1
+default_stats=off
+mdnie_shortcut_enabled=on
 cfs_tweaks=1
