@@ -1,0 +1,28 @@
+#!/sbin/busybox sh
+# $1 - "negative_screen"
+# $2 - value=
+
+if [ "a$2" == "a" ]; then
+        echo $negative_screen
+else
+        negative_screen=$2
+        echo $negative_screen
+fi;
+
+case "${negative_screen}" in
+       1)
+		kmemhelper -n homekey_trg_cnt -t int 4 > /dev/null 2>&1
+		;;
+	2)
+		kmemhelper -n homekey_trg_cnt -t int 5 > /dev/null 2>&1
+		;;
+	3)
+		kmemhelper -n homekey_trg_cnt -t int 6 > /dev/null 2>&1
+		;;
+	4)
+		kmemhelper -n homekey_trg_cnt -t int 0 > /dev/null 2>&1
+		;;
+	*)
+		negative_screen=1
+		;;
+esac;
