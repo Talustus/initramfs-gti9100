@@ -67,6 +67,9 @@ if [ "$logger" == "off" ];then
   echo 0 > /sys/module/xt_qtaguid/parameters/debug_mask
 fi
 
+#apply last soundgasm level on boot
+/res/uci.sh soundgasm_hp $soundgasm_hp
+
 ## for ntfs automounting
 insmod /lib/modules/fuse.ko
 mkdir /mnt/ntfs
@@ -104,7 +107,7 @@ sleep 30
 )&
 
 #usb mode
-/res/customconfig/actions/usb-mode ${usb_mode}
+# /res/customconfig/actions/usb-mode ${usb_mode}
 
 #read sync < /data/sync_fifo
 #rm /data/sync_fifo

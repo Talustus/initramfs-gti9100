@@ -142,6 +142,13 @@
 
   </settingsTab>
 
+  <settingsTab name="Audio">
+    <settingsPane description="Headphone Amplification Settings" name="Headphone Amplification">
+      <seekBar description="Headphone Amplifier Level (0-3 which corresponds to 0-1.5-3-6dB)" 
+		name="Headphone Amplifier" action="soundgasm_hp" unit="" min="0" reversed="false" step="1" max="3"/>
+    </settingsPane>
+  </settingsTab>
+
   <settingsTab name="Screen">
     <settingsPane description="Brightness Curve settings which modify auto-brightness behavior." name="Brightness Curve">
        <seekBar description="Sets touchscreen move sensitivity (vitalij value)." 
@@ -154,15 +161,16 @@
 		name="max_gamma" action="generic /sys/class/misc/brightness_curve/max_gamma" unit="" min="0" reversed="false" step="1" max="24"/>
     </settingsPane>
     <settingsPane description="Other Settings" name="Other Settings">
+	<checkbox description="Enable LCD-Powersaving Mode" name="LCD-Powersaving Mode" 
+		action="generic01 /sys/class/lcd/panel/power_reduce" label="LCD-Powersaving Mode" />
+
        <seekBar description="User adjustable gamma shift." 
 		name="Gamma Shift" action="generic /sys/devices/platform/samsung-pd.2/s3cfb.0/spi_gpio.3/spi_master/spi3/spi3.0/lcd/panel/user_gamma_adjust" unit="" min="-50" reversed="false" step="5" max="50"/>
        <seekBar description="Vibration intensity level (default 6)" 
 		name="Vibration Intensity" action="generic /sys/devices/platform/tspdrv/vibrator_level" unit="" min="0" reversed="false" step="1" max="6"/>
-       <spinner description="Enable or Disable LCD-Powersaving Mode" name="LCD_POWERSAVE" action="generic /sys/class/lcd/panel/power_reduce">
-             <spinnerItem name="Enabled" value="1"/> 
-             <spinnerItem name="Disabled" value="0"/>
-       </spinner>
-	<checkbox description="Enable inverting the screen colors by quickly pressing Home button several times (Count can be configured below)" name="mDNIe Negative Toggle" action="generic01 /sys/module/gpio_keys/parameters/mdnie_shortcut_enabled" label="mDNIe Negative Toggle"/>
+
+	<checkbox description="Enable inverting the screen colors by quickly pressing Home button several times (Count can be configured below)" 
+		name="mDNIe Negative Toggle" action="generic01 /sys/module/gpio_keys/parameters/mdnie_shortcut_enabled" label="mDNIe Negative Toggle"/>
 	<spinner description="Negative Color, Screen effect settings, Fast Click Home for number of times configured to activate MOD" 
 		name="Negative Screen inverting." action="negative_screen">
 		<spinnerItem name="Set 4 Clicks (default)" value="1"/>
@@ -236,7 +244,7 @@
              <spinnerItem name="Force Mass Storage Mode" value="mass_storage-adb"/> 
              <spinnerItem name="Force MTP Mode" value="mtp-adb"/> 
       </spinner>
-      <checkbox description="If checked, BetterBatteryStatus will report exclusive (non-overlapping) deleted wakelock statistics." name="Exclusive Wakelock Stats" action="generic01 /sys/module/wakelock/parameters/default_stats" label="Exclusive Wakelock Stats"/>
+      <checkbox description="If checked, BetterBatteryStatus will report exclusive (non-overlapping) wakelock statistics." name="Exclusive Wakelock Stats" action="generic01 /sys/module/wakelock/parameters/default_stats" label="Exclusive Wakelock Stats"/>
       <button description="If you think that the fuel gauge chip is behaving weird use this button to reset it. Give it a few hours after you reset the gauge. It may still show you funny values for those period, then the battery percentage should be fine." name="Reset Fuel-Gauge Chip" action="reset-fuelgauge" label="Reset Fuel-Gauge Chip"/>
     </settingsPane>
     <settingsPane description="Removing/Reinstalling root to support some apps which requires you not to have a rooted phone." name="Remove/Reinstall Root">
