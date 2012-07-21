@@ -82,14 +82,15 @@ JELLY=0
 [ -f /system/lib/ssl/engines/libkeystore.so ] && JELLY=1
 
 
+## JellyBean (4.1.1) Support
 if [ "$JELLY" == 1 ];
 then
   rm /init.rc
   rm /init.rc.2
   mv /res/misc/init.jelly /init.rc
   mv /res/misc/init.jelly.2 /init.rc.2
-  mv /res/misc/init.race.rc /init.trace.rc
-  echo "Found JellyBean based ROM booting up ..."
+  mv /res/misc/init.trace.rc /init.trace.rc
+  sed -i 's|STOCK|JellyBean|g' sbin/init.samsung
 else
 
   ## B2G Support
@@ -123,6 +124,7 @@ else
     mv /res/misc/init.miui /init.rc
     mv /res/misc/init.miui.2 /init.rc.2
     mv /res/misc/default.prop.miui /default.prop
+    sed -i 's|STOCK|MIUI|g' sbin/init.samsung
   fi
 
   ## S4A Support
