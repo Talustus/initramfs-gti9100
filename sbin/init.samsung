@@ -1,6 +1,6 @@
 #!/sbin/busybox sh
 
-echo "found Samsung/MIUI System, booting up..."
+echo "found STOCK based System, booting up..."
 rm /init
 mv /innt /init
 cd /
