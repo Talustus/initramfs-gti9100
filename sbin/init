@@ -35,7 +35,7 @@ mount -t vfat /dev/block/mmcblk0p11 /mnt/sdcard
 [ -f /preload/build.prop ] || SECONDROM=0
 [ -f /mnt/sdcard/.secondrom/data.img ] || SECONDROM=0
 [ -f /mnt/sdcard/.secondrom/cache.img ] || SECONDROM=0
-[ -f /mnt/sdcard/.nobootlogo ] && NOBOOTLOGO=1
+[ -f /mnt/sdcard/.nobootlogo ] && NOBOOTLOGO=1 && SECONDROM=0
 umount /preload
 umount /mnt/sdcard
 
