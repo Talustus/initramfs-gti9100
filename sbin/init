@@ -9,7 +9,7 @@ busybox mount -t sysfs sysfs /sys
 ## Enable Logging?? ##
 mv /boot-log.txt /boot-log.bak
 busybox date >/boot-log.txt
-exec >>boot-log.txt 2>&1
+exec >>/boot-log.txt 2>&1
 #
 echo "Starting System ..."
 
@@ -85,12 +85,10 @@ JELLY=0
 ## JellyBean (4.1.1) Support
 if [ "$JELLY" == 1 ];
 then
-  rm /init.rc
-  rm /init.rc.2
-  mv /res/misc/init.jelly /init.rc
-  mv /res/misc/init.jelly.2 /init.rc.2
-  mv /res/misc/init.trace.rc /init.trace.rc
-  sed -i 's|STOCK|JellyBean|g' sbin/init.samsung
+  echo 1 > /proc/sys/kernel/rom_feature_set
+  umount /system
+  rm /sbin/init.samsung
+  mv /sbin/init.jb /sbin/init.samsung
 else
 
   ## B2G Support
@@ -108,7 +106,7 @@ else
   if [ "$AOSP" == 1 ];
   then
     echo 1 > /proc/sys/kernel/rom_feature_set
-    /sbin/busybox umount /system
+    umount /system
     rm /sbin/init.samsung
     mv /sbin/init.cm /sbin/init.samsung
   else

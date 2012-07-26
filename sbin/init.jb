@@ -1,0 +1,29 @@
+#!/sbin/busybox sh
+
+echo "found JellyBean/CM10 System, booting up"
+
+export _PATH="$PATH"
+export PATH=/sbin
+
+cd /
+busybox date >>/boot-log.txt
+exec >>/boot-log.txt 2>&1
+
+rm /default.prop
+rm /init.goldfish.rc
+rm /init.rc
+rm /init.rc.2
+rm /init.smdk4210.rc
+rm /init.smdk4210.usb.rc
+rm /ueventd.rc
+rm /ueventd.smdk4210.rc
+
+rm /init
+mv /innt /init
+
+busybox cp -a /res/misc/jelly/* /
+
+busybox date >>/boot-log.txt
+busybox rm -fr /res/misc/jelly /dev/*
+export PATH="${_PATH}"
+exec /init
