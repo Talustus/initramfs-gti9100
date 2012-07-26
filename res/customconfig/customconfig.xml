@@ -252,6 +252,12 @@
       <button description="Tries to reinstall root. If this fails, please check auto-install root checkbox and restart." name="Install  Root" action="install-root" label="Install Root"/>
       <checkbox description="If checked, installs root on the next restart." name="Auto-Install Root" action="generic /tmp/install_root" label="Auto-Install Root"/>
     </settingsPane>
+    <settingsPane description="Enable or Disable the BootMenu" name="Boot Menu">	
+       <spinner description="This setting enables/disables the BootMenu and logo NOTE: You will not be able to boot the second rom while BootMenu is disabled" name="Enable Bootmenu" action="bootmenu_enabled">
+             <spinnerItem name="BootMenu Enabled" value="1"/> 
+             <spinnerItem name="BootMenu Disabled" value="0"/> 
+       </spinner>
+    </settingsPane>
   </settingsTab>
 
 </settingsRoot>

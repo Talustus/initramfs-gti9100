@@ -54,3 +54,4 @@ mdnie_shortcut_enabled=on
 negative_screen=1
 cfs_tweaks=1
 soundgasm_hp=0
+bootmenu_enabled=1
