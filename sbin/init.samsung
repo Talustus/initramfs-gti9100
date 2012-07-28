@@ -1,6 +1,13 @@
 #!/sbin/busybox sh
 
 echo "found STOCK based System, booting up..."
+
+if [ "$1" == 1 ];
+then
+  rm /init.rc
+  mv /init.rc.2 /init.rc 
+fi
+ 
 rm /init
 mv /innt /init
 cd /

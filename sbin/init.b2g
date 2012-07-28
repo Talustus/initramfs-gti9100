@@ -1,7 +1,0 @@
-#!/sbin/busybox sh
-
-echo "found Boot to Gecko System, booting up ..."
-rm /init
-mv /innt /init
-cd /
-exec /init

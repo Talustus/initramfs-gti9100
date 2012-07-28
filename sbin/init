@@ -20,6 +20,7 @@ if grep -q bootmode=2 /proc/cmdline ; then
   mv /recovery.rc /init.rc
   exec /sbin/init.samsung
 fi
+
 if busybox grep -q 1 /sys/class/power_supply/battery/batt_lp_charging ; then
   # low power mode
   echo 0 > /proc/sys/kernel/rom_feature_set
@@ -98,8 +99,7 @@ else
     rm /init.rc.2
     mv /res/misc/init.b2g /init.rc
     mv /res/misc/init.b2g.2 /init.rc.2
-    rm /sbin/init.samsung
-    mv /sbin/init.b2g /sbin/init.samsung
+    sed -i 's|STOCK|B2G|g' sbin/init.samsung
   fi;
 
   ## CM/AOSP Support
@@ -132,16 +132,9 @@ else
     rm /init.rc.2
     mv /res/misc/init.s4a /init.rc
     mv /res/misc/init.s4a.2 /init.rc.2
-    rm /sbin/init.samsung
-    mv /sbin/init.s4a /sbin/init.samsung
+    sed -i 's|STOCK|Sense4All|g' sbin/init.samsung
   fi
 fi
 
-if [ "$SECONDROM" == "1" ];
-then
-  mv /init.smdk4210.rc.2 /init.smdk4210.rc
-  mv /init.rc.2 /init.rc
-fi
-
 busybox umount /system
-exec /sbin/init.samsung
+exec /sbin/init.samsung $SECONDROM
