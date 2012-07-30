@@ -14,7 +14,7 @@ on early-init
 
     start ueventd
 
-# create mountpoints
+    # create mountpoints
     mkdir /mnt 0775 root system
 
 on init
@@ -23,7 +23,7 @@ sysclktz 0
 
 loglevel 3
 
-# setup the global environment
+    # setup the global environment
     export PATH /sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
     export LD_LIBRARY_PATH /vendor/lib:/system/lib
     export ANDROID_BOOTLOGO 1
@@ -35,15 +35,15 @@ loglevel 3
     export LOOP_MOUNTPOINT /mnt/obb
     export BOOTCLASSPATH /system/framework/core.jar:/system/framework/core-junit.jar:/system/framework/bouncycastle.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/framework2.jar:/system/framework/android.policy.jar:/system/framework/services.jar:/system/framework/apache-xml.jar
 
-# Backward compatibility
+    # Backward compatibility
     symlink /system/etc /etc
     symlink /sys/kernel/debug /d
 
-# Right now vendor lives on the same filesystem as system,
-# but someday that may change.
+    # Right now vendor lives on the same filesystem as system,
+    # but someday that may change.
     symlink /system/vendor /vendor
 
-# Create cgroup mount point for cpu accounting
+    # Create cgroup mount point for cpu accounting
     mkdir /acct
     mount cgroup none /acct cpuacct
     mkdir /acct/uid
@@ -85,7 +85,7 @@ loglevel 3
     write /proc/sys/kernel/sched_rt_runtime_us 950000
     write /proc/sys/kernel/sched_rt_period_us 1000000
 
-# Create cgroup mount points for process groups
+    # Create cgroup mount points for process groups
     mkdir /dev/cpuctl
     mount cgroup none /dev/cpuctl cpu
     chown system system /dev/cpuctl
@@ -106,17 +106,16 @@ loglevel 3
     chown system system /dev/cpuctl/apps/bg_non_interactive/tasks
     chmod 0666 /dev/cpuctl/apps/bg_non_interactive/tasks
     # 5.0 %
-    write /dev/cpuctl/bg_non_interactive/cpu.shares 52
     write /dev/cpuctl/apps/bg_non_interactive/cpu.shares 52
     write /dev/cpuctl/apps/bg_non_interactive/cpu.rt_runtime_us 700000
     write /dev/cpuctl/apps/bg_non_interactive/cpu.rt_period_us 1000000
 
-# Allow everybody to read the xt_qtaguid resource tracking misc dev.
-# This is needed by any process that uses socket tagging.
+    # Allow everybody to read the xt_qtaguid resource tracking misc dev.
+    # This is needed by any process that uses socket tagging.
     chmod 0644 /dev/xt_qtaguid
 
 on fs
-# mount mtd partitions
+    # mount mtd partitions
     # Mount /system rw first to give the filesystem a chance to save a checkpoint
     mount yaffs2 mtd@system /system
     mount yaffs2 mtd@system /system ro remount
@@ -222,27 +221,21 @@ on post-fs-data
     # Set indication (checked by vold) that we have finished this action
     #setprop vold.post_fs_data_done 1
 
-    chown system system /sys/class/android_usb/android0/f_mass_storage/lun/file
-    chmod 0660 /sys/class/android_usb/android0/f_mass_storage/lun/file
-    chown system system /sys/class/android_usb/android0/f_rndis/ethaddr
-    chmod 0660 /sys/class/android_usb/android0/f_rndis/ethaddr
-
-
-# Include extra init file
+    # Include extra init file
     import /system/etc/init.local.rc
 
 on boot
-# basic network init
+    # basic network init
     ifup lo
     hostname localhost
     domainname localdomain
 
-# set RLIMIT_NICE to allow priorities from 19 to -20
+    # set RLIMIT_NICE to allow priorities from 19 to -20
     setrlimit 13 40 40
 
-# Memory management.  Basic kernel parameters, and allow the high
-# level system server to be able to adjust the kernel OOM driver
-# parameters to match how it is managing things.
+    # Memory management.  Basic kernel parameters, and allow the high
+    # level system server to be able to adjust the kernel OOM driver
+    # parameters to match how it is managing things.
     write /proc/sys/vm/overcommit_memory 1
     write /proc/sys/vm/min_free_order_shift 4
     chown root system /sys/module/lowmemorykiller/parameters/adj
@@ -323,17 +316,17 @@ on boot
     chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 
-# Define TCP buffer sizes for various networks
-#   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
-    setprop net.tcp.buffersize.default 4096,87380,704512,4096,16384,110208
+    # Define TCP buffer sizes for various networks
+    # ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
+    setprop net.tcp.buffersize.default 4096,87380,110208,4096,16384,110208
     setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
     setprop net.tcp.buffersize.lte     524288,1048576,2097152,262144,524288,1048576
-    setprop net.tcp.buffersize.umts    4094,87380,563200,4096,16384,110208
-    setprop net.tcp.buffersize.hspa    4094,87380,704512,4096,16384,262144
+    setprop net.tcp.buffersize.umts    4094,87380,110208,4096,16384,110208
+    setprop net.tcp.buffersize.hspa    4094,87380,262144,4096,16384,262144
     setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
 
-# allow system to modify ksm control files
+    # allow system to modify ksm control files
     chown root system /sys/kernel/mm/ksm/pages_to_scan
     chmod 0664 /sys/kernel/mm/ksm/pages_to_scan
     chown root system /sys/kernel/mm/ksm/sleep_millisecs
@@ -343,10 +336,10 @@ on boot
     write /sys/kernel/mm/ksm/sleep_millisecs 1500
     write /sys/kernel/mm/ksm/pages_to_scan 256
 
-# Set this property so surfaceflinger is not started by system_init
+    # Set this property so surfaceflinger is not started by system_init
     setprop system_init.startsurfaceflinger 0
 
-# Run sysinit
+    # Run sysinit
     exec /system/bin/sysinit
 
     class_start core
@@ -378,51 +371,8 @@ on property:vold.decrypt=trigger_shutdown_framework
     class_reset late_start
     class_reset main
 
-# Used to disable USB when switching states
-on property:sys.usb.config=none
-    stop adbd
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/bDeviceClass 0
-    setprop sys.usb.state $sys.usb.config
-
-# adb only USB configuration
-# This should only be used during device bringup
-# and as a fallback if the USB manager fails to set a standard configuration
-on property:sys.usb.config=adb
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor 18d1
-    write /sys/class/android_usb/android0/idProduct D002
-    write /sys/class/android_usb/android0/functions $sys.usb.config
-    write /sys/class/android_usb/android0/enable 1
-    start adbd
-    setprop sys.usb.state $sys.usb.config
-
-# USB accessory configuration
-on property:sys.usb.config=accessory
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor 18d1
-    write /sys/class/android_usb/android0/idProduct 2d00
-    write /sys/class/android_usb/android0/functions $sys.usb.config
-    write /sys/class/android_usb/android0/enable 1
-    setprop sys.usb.state $sys.usb.config
-
-# USB accessory configuration, with adb
-on property:sys.usb.config=accessory,adb
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor 18d1
-    write /sys/class/android_usb/android0/idProduct 2d01
-    write /sys/class/android_usb/android0/functions $sys.usb.config
-    write /sys/class/android_usb/android0/enable 1
-    start adbd
-    setprop sys.usb.state $sys.usb.config
-
-# Used to set USB configuration at boot and to switch the configuration
-# when changing the default configuration
-on property:persist.sys.usb.config=*
-    setprop sys.usb.config $persist.sys.usb.config
-
-## Daemon processes to be run by init.
-##
+    ## Daemon processes to be run by init.
+    ##
 service ueventd /sbin/ueventd
     class core
     critical
@@ -437,12 +387,12 @@ service console /system/bin/sh
 on property:ro.debuggable=1
     start console
 
-# adbd is controlled via property triggers in init.<platform>.usb.rc
+    # adbd is controlled via property triggers in init.<platform>.usb.rc
 service adbd /sbin/adbd
     class core
     disabled
 
-# adbd on at boot in emulator
+    # adbd on at boot in emulator
 on property:ro.kernel.qemu=1
     start adbd
 
@@ -573,15 +523,16 @@ service mdnsd /system/bin/mdnsd
     disabled
     oneshot
 
-# adb over network
+    # adb over network
 on property:service.adb.tcp.port=5555
     stop adbd
     start adbd
+
 on property:service.adb.tcp.port=-1
     stop adbd
     start adbd
 
 service postinit /sbin/ext/post-init.sh
-	class core
-	user root
-	oneshot
+    class core
+    user root
+    oneshot

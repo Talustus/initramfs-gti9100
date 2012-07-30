@@ -18,6 +18,7 @@ tar xvf /res/misc/dev.tar
 if grep -q bootmode=2 /proc/cmdline ; then
   echo 0 > /proc/sys/kernel/rom_feature_set
   mv /recovery.rc /init.rc
+  sed -i 's|found STOCK based System|Recovery BOOT|g' sbin/init.samsung
   exec /sbin/init.samsung
 fi
 
@@ -26,6 +27,7 @@ if busybox grep -q 1 /sys/class/power_supply/battery/batt_lp_charging ; then
   echo 0 > /proc/sys/kernel/rom_feature_set
   cp lpm.rc init.rc
   rm init.smdk4210.rc
+  sed -i 's|found STOCK based System|LPM BOOT|g' sbin/init.samsung
   exec /sbin/init.samsung
 fi
 

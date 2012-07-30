@@ -1,6 +1,7 @@
 #!/sbin/busybox sh
 
-echo "found Cyanogen System, booting up Mode: $1"
+BMODE=$1
+echo "found Cyanogen System, booting up Mode: $BMODE"
 
 export _PATH="$PATH"
 export PATH=/sbin
@@ -18,12 +19,12 @@ rm /init.smdk4210.usb.rc
 rm /ueventd.rc
 rm /ueventd.smdk4210.rc
 
+rm /innt
 rm /init
-mv /innt /init
 
 busybox cp -a /res/misc/cyano/* /
 
-if [ "$1" == "1" ];
+if [ "$BMODE" == "1" ];
 then
   echo "2ndROM Boot"
   rm /init.smdk4210.rc

@@ -1,13 +1,16 @@
 #!/sbin/busybox sh
 
-echo "found STOCK based System, booting up..."
+BMODE=$1
+echo "found STOCK based System, booting up... BootMode: $BMODE"
 
-if [ "$1" == 1 ];
+if [ "$BMODE" == "1" ];
 then
   rm /init.rc
   mv /init.rc.2 /init.rc 
 fi
- 
+
+rm -rf /res/misc/cyano
+rm -rf /res/misc/jelly
 rm /init
 mv /innt /init
 cd /

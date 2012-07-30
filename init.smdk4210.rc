@@ -63,7 +63,7 @@ on boot
     setprop status.battery.level_scale 9
 
 service notified_event /system/bin/notified_event
-	class main
+    class main
     user system
     group system
     socket notified_event stream 0660 root system

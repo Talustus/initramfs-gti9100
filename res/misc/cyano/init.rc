@@ -8,6 +8,9 @@ on early-init
     mkdir /mnt 0775 root system
 
 on init
+# Vibetonz
+    export VIBE_PIPE_PATH /dev/pipes
+    mkdir /dev/pipes 0771 shell shell
 
 sysclktz 0
 
@@ -61,11 +64,11 @@ loglevel 3
     mkdir /mnt/obb 0700 root system
     mount tmpfs tmpfs /mnt/obb mode=0755,gid=1000
 
+    mkdir /mnt/.lfs 0755 root root
+
     write /proc/sys/kernel/panic_on_oops 1
     write /proc/sys/kernel/hung_task_timeout_secs 0
     write /proc/cpu/alignment 4
-    write /proc/sys/kernel/sched_latency_ns 10000000
-    write /proc/sys/kernel/sched_wakeup_granularity_ns 2000000
     write /proc/sys/kernel/sched_compat_yield 1
     write /proc/sys/kernel/sched_child_runs_first 0
     write /proc/sys/kernel/randomize_va_space 2
@@ -94,7 +97,7 @@ loglevel 3
     chmod 0644 /dev/xt_qtaguid
 
 on fs
-# mount mtd partitions
+    # mount mtd partitions
     # Mount /system rw first to give the filesystem a chance to save a checkpoint
     mount yaffs2 mtd@system /system
     mount yaffs2 mtd@system /system ro remount
@@ -127,15 +130,25 @@ on post-fs
     # create the lost+found directories, so as to enforce our permissions
     mkdir /cache/lost+found 0770 root root
 
+    # double check the perms, in case lost+found already exists, and set owner
+    chown root root /cache/lost+found
+    chmod 0777 /cache/lost+found
+
 on post-fs-data
     # We chown/chmod /data again so because mount is run as root + defaults
     chown system system /data
     chmod 0771 /data
+    mkdir /data/system
+    chown system system /data/system
+    chmod 0771 /data/system
 
     # Create dump dir and collect dumps.
     # Do this before we mount cache so eventually we can use cache for
     # storing dumps on platforms which do not have a dedicated dump partition.
+
     mkdir /data/dontpanic 0750 root log
+    chown root log /data/dontpanic
+    chmod 0755 /data/dontpanic
 
     # Collect apanic data, free resources and re-arm trigger
     copy /proc/apanic_console /data/dontpanic/apanic_console
@@ -156,16 +169,25 @@ on post-fs-data
     mkdir /data/misc/keychain 0771 system system
     mkdir /data/misc/vpn 0770 system vpn
     mkdir /data/misc/systemkeys 0700 system system
+    mkdir /data/misc/vpn/profiles 0770 system system
+    mkdir /data/misc/radio 0775 radio system
     # give system access to wpa_supplicant.conf for backup and restore
     mkdir /data/misc/wifi 0770 wifi wifi
+    chmod 0770 /data/misc/wifi
     chmod 0660 /data/misc/wifi/wpa_supplicant.conf
     mkdir /data/local 0751 root root
+
+    # For security reasons, /data/local/tmp should always be empty.
+    # Do not place files or directories in /data/local/tmp
     mkdir /data/local/tmp 0771 shell shell
     mkdir /data/data 0771 system system
     mkdir /data/app-private 0771 system system
     mkdir /data/app 0771 system system
     mkdir /data/property 0700 root root
+    mkdir /data/ssh 0750 root shell
+    mkdir /data/ssh/empty 0700 root root
     mkdir /data/radio 0770 radio radio
+    mkdir /cache/download 0777 system cache
 
     # create dalvik-cache and double-check the perms, so as to enforce our permissions
     mkdir /data/dalvik-cache 0771 system system
@@ -184,9 +206,13 @@ on post-fs-data
     # create the lost+found directories, so as to enforce our permissions
     mkdir /data/lost+found 0770 root root
 
+    # double check the perms, in case lost+found already exists, and set owner
+    chown root root /data/lost+found
+    chmod 0777 /data/lost+found
+
     # create directory for DRM plug-ins - give drm the read/write access to
     # the following directory.
-    mkdir /data/drm 0770 drm drm
+    mkdir /data/drm 0775 drm drm
 
     # If there is no fs-post-data action in the init.<device>.rc file, you
     # must uncomment this line, otherwise encrypted filesystems
@@ -211,19 +237,56 @@ on boot
 # set RLIMIT_NICE to allow priorities from 19 to -20
     setrlimit 13 40 40
 
+
 # Memory management.  Basic kernel parameters, and allow the high
 # level system server to be able to adjust the kernel OOM driver
 # paramters to match how it is managing things.
-    write /proc/sys/vm/overcommit_memory 1
-    write /proc/sys/vm/min_free_order_shift 4
     chown root system /sys/module/lowmemorykiller/parameters/adj
     chmod 0664 /sys/module/lowmemorykiller/parameters/adj
     chown root system /sys/module/lowmemorykiller/parameters/minfree
     chmod 0664 /sys/module/lowmemorykiller/parameters/minfree
 
+# Define the oom_adj values for the classes of processes that can be
+# killed by the kernel.  These are used in ActivityManagerService.
+    setprop ro.FOREGROUND_APP_ADJ 0
+    setprop ro.VISIBLE_APP_ADJ 1
+    setprop ro.PERCEPTIBLE_APP_ADJ 2
+    setprop ro.HEAVY_WEIGHT_APP_ADJ 3
+    setprop ro.SECONDARY_SERVER_ADJ 4
+    setprop ro.BACKUP_APP_ADJ 5
+    setprop ro.HOME_APP_ADJ 1
+    setprop ro.HIDDEN_APP_MIN_ADJ 7
+    setprop ro.EMPTY_APP_ADJ 15
+
+# Define the memory thresholds at which the above process classes will
+# be killed.  These numbers are in pages (4k).
+    # These are currently tuned for tablets with approx 1GB RAM.
+    setprop ro.FOREGROUND_APP_MEM 8192
+    setprop ro.VISIBLE_APP_MEM 10240
+    setprop ro.PERCEPTIBLE_APP_MEM 12288
+    setprop ro.HEAVY_WEIGHT_APP_MEM 12288
+    setprop ro.SECONDARY_SERVER_MEM 14336
+    setprop ro.BACKUP_APP_MEM 14336
+    setprop ro.HOME_APP_MEM 14336
+    setprop ro.HIDDEN_APP_MEM 16384
+    setprop ro.EMPTY_APP_MEM 20480
+
+# Write value must be consistent with the above properties.
+# Note that the driver only supports 6 slots, so we have combined some of
+# the classes into the same memory level; the associated processes of higher
+# classes will still be killed first.
+    write /sys/module/lowmemorykiller/parameters/adj 0,1,2,4,7,15
+
+    write /proc/sys/vm/overcommit_memory 0
+    write /proc/sys/vm/min_free_order_shift 4
+    write /sys/module/lowmemorykiller/parameters/minfree 8192,10240,12288,14336,16384,20480
+
+    # Set init its forked children's oom_adj.
+    write /proc/1/oom_adj -16
+
     # Tweak background writeout
     write /proc/sys/vm/dirty_expire_centisecs 200
-    write /proc/sys/vm/dirty_background_ratio  5
+    write /proc/sys/vm/dirty_background_ratio  10
 
     # Permissions for System Server and daemons.
     chown radio system /sys/android_power/state
@@ -232,14 +295,21 @@ on boot
     chown radio system /sys/android_power/acquire_partial_wake_lock
     chown radio system /sys/android_power/release_wake_lock
     chown radio system /sys/power/state
+    chown radio system /sys/power/wakeup_count
     chown radio system /sys/power/wake_lock
     chown radio system /sys/power/wake_unlock
     chmod 0660 /sys/power/state
     chmod 0660 /sys/power/wake_lock
     chmod 0660 /sys/power/wake_unlock
+
+    # Assume SMP uses shared cpufreq policy for all CPUs
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chmod 0666 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+
     chown system system /sys/class/timed_output/vibrator/enable
     chown system system /sys/class/leds/keyboard-backlight/brightness
     chown system system /sys/class/leds/lcd-backlight/brightness
+    chown system system /sys/class/backlight/panel/brightness
     chown system system /sys/class/leds/button-backlight/brightness
     chown system system /sys/class/leds/jogball-backlight/brightness
     chown system system /sys/class/leds/red/brightness
@@ -454,7 +524,7 @@ service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-sys
 service drm /system/bin/drmserver
     class main
     user drm
-    group system inet drmrpc
+    group drm system inet drmrpc sdcard_r
 
 service media /system/bin/mediaserver
     class main
@@ -507,7 +577,7 @@ service mtpd /system/bin/mtpd
 service keystore /system/bin/keystore /data/misc/keystore
     class main
     user keystore
-    group keystore
+    group keystore drmrpc
     socket keystore stream 666
 
 service dumpstate /system/bin/dumpstate -s
@@ -520,11 +590,12 @@ service dumpstate /system/bin/dumpstate -s
 on property:service.adb.tcp.port=5555
     stop adbd
     start adbd
+
 on property:service.adb.tcp.port=-1
     stop adbd
     start adbd
 
 service postinit /sbin/ext/post-init.sh
-	class core
-	user root
-	oneshot
+    class core
+    user root
+    oneshot

@@ -12,8 +12,8 @@ on early-init
     mkdir /mnt/.lfs 0755 root root
 
     # for backwards compatibility
-    symlink /storage/sdcard1 /sdcard
-    symlink /storage/sdcard1 /mnt/sdcard
+    symlink /storage/sdcard0 /sdcard
+    symlink /storage/sdcard0 /mnt/sdcard
     symlink /storage/sdcard1 /extSdCard
     symlink /storage/sdcard1 /mnt/extSdCard
     symlink /storage/usbdisk0 /usbdisk0
@@ -34,15 +34,16 @@ on early-init
     chmod 0777 /sys/class/hdmi_audio/hdmi_audio/hdmi_audio_set_ext
 
 on fs
-# mount ext4 partitions
-    mount ext4 /res/dev/system /system noatime wait ro
+    # mount ext4 partitions
+    mount ext4 /res/dev/system /system noatime wait
 
+    ## FOR CM compatibility
     mount tmpfs tmpfs /system/lib/modules
     symlink /lib/modules/cifs.ko /system/lib/modules/cifs.ko
     symlink /lib/modules/dhd.ko /system/lib/modules/dhd.ko
     symlink /lib/modules/scsi_wait_scan.ko /system/lib/modules/scsi_wait_scan.ko
     symlink /lib/modules/Si4709_driver.ko /system/lib/modules/Si4709_driver.ko
-    
+
     # verify filesystem (UMS)
     exec sformat /dev/block/mmcblk0p11 vfat
 
@@ -50,8 +51,10 @@ on fs
     mount vfat /dev/block/mmcblk0p11 /mnt/.secondrom wait utf8
 
     exec sfsck /res/dev/cache ext4
-    mount ext4 loop@/res/dev/cache /cache nosuid nodev noatime wait
-    mount ext4 loop@/res/dev/data /data nosuid nodev noatime wait noauto_da_alloc
+    mount ext4 loop@/res/dev/cache /cache nosuid nodev noatime wait rw
+
+    exec sfsck /res/dev/data ext4
+    mount ext4 loop@/res/dev/data /data nosuid nodev noatime wait noauto_da_alloc rw
 
     mount ext4 /dev/block/mmcblk0p1 /efs nosuid nodev noatime wait
     mkdir /efs/bluetooth
@@ -67,10 +70,10 @@ on fs
 
 on post-fs-data
 # insmod kernel modules
+    insmod /system/lib/modules/j4fs.ko
     insmod /system/lib/modules/Si4709_driver.ko
     
 # mount param.lfs
-    insmod /system/lib/modules/j4fs.ko
     mount j4fs /dev/block/mmcblk0p4 /mnt/.lfs
 
 # MDNS
