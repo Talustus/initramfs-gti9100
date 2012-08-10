@@ -5,12 +5,14 @@ on init
     export PATH /sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
     export ANDROID_ROOT /system
     export ANDROID_DATA /data
+    export ANDROID_CACHE /cache
+    export SECONDARY_STORAGE /emmc
     export EXTERNAL_STORAGE /sdcard
 
-    #symlink /system/etc /etc
+    # symlink /system/etc /etc
 
     mkdir /sdcard
-    mkdir /sdcard1
+    mkdir /usbdisk
     mkdir /system
     mkdir /data
     mkdir /cache
@@ -20,8 +22,8 @@ on init
 on fs
     mount ext4 /dev/block/mmcblk0p9 /system noatime wait
 
-#    mkdir /efs
-#    mount ext4 /dev/block/mmcblk0p1 /efs nosuid nodev noatime wait
+    # mkdir /efs
+    # mount ext4 /dev/block/mmcblk0p1 /efs nosuid nodev noatime wait
 
     # check encryption status, checking UMS & data should be excuted after this command 
     exec check_encryption_status /dev/block/mmcblk0p10
@@ -30,6 +32,11 @@ on fs
     exec sformat /dev/block/mmcblk0p11 vfat
 
 on boot
+    # Permissions for mDNIe
+    chown system media_rw /sys/class/mdnie/mdnie/mode
+    chown system media_rw /sys/class/mdnie/mdnie/outdoor
+    chown system media_rw /sys/class/mdnie/mdnie/scenario
+    write /sys/class/mdnie/mdnie/scenario 4
 
     ifup lo
     hostname localhost
@@ -55,10 +62,11 @@ on property:adb.recovery=1
     write /sys/class/android_usb/android0/idProduct 685e
     write /sys/class/android_usb/android0/functions mass_storage,adb
     write /sys/class/android_usb/android0/enable 1
-    write /sys/class/android_usb/android0/iManufacturer $ro.product.manufacturer
-    write /sys/class/android_usb/android0/iProduct $ro.product.model
-    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    write /sys/class/android_usb/android0/iManufacturer ${ro.product.manufacturer}
+    write /sys/class/android_usb/android0/iProduct ${ro.product.model}
+    write /sys/class/android_usb/android0/iSerial ${ro.serialno}
     start adbd
+    setprop service.adb.root 1
 
 # Restart adbd so it can run as root
 on property:service.adb.root=1
