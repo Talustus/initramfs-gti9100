@@ -1,12 +1,12 @@
 #!/sbin/busybox sh
 
-if [ "a$3" == "a" ];then
-  evalcmd='eval "echo \$GPUTHRESHOLD$2"'
+if [ "a${3}" == "a" ];then
+  evalcmd='eval "echo \$GPUTHRESHOLD${2}"'
   eval $evalcmd
 else
-  evalcmd='eval "GPUTHRESHOLD$2=$3"'
+  evalcmd='eval "GPUTHRESHOLD${2}=${3}"'
   eval $evalcmd
-  evalcmd='eval "echo \$GPUTHRESHOLD$2"'
+  evalcmd='eval "echo \$GPUTHRESHOLD${2}"'
   eval $evalcmd
 fi
 

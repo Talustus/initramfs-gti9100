@@ -55,3 +55,6 @@ negative_screen=1
 cfs_tweaks=1
 soundgasm_hp=0
 bootmenu_enabled=1
+zram_size=0
+user_cb=137
+user_cr=120

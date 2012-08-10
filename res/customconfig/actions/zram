@@ -1,0 +1,21 @@
+#!/sbin/busybox sh
+#
+# zram support forked from Dorimanx
+# fixed for DreamKernel
+# this is experimental ...
+
+if [ "a${2}" == "a" ];then
+  evalcmd='eval "echo \$zram_size"'
+  eval $evalcmd
+else
+  evalcmd='eval "zram_size=${2}"'
+  eval $evalcmd
+  evalcmd='eval "echo \$zram_size"'
+  eval $evalcmd
+
+  swapoff /dev/block/zram0 > /dev/null 2>&1
+  echo 1 > /sys/block/zram0/reset
+  echo $((${zram_size}*1024*1024)) > /sys/block/zram0/disksize
+  mkswap /dev/block/zram0 > /dev/null 2>&1
+  swapon /dev/block/zram0 > /dev/null 2>&1
+fi

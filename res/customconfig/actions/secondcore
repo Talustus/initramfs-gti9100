@@ -1,7 +1,7 @@
 #!/sbin/busybox sh
 
-if [ "a$2" != "a" ];then
-  secondcore=$2
+if [ "a${2}" != "a" ];then
+  secondcore=${2}
 fi
 
 case "${secondcore}" in
@@ -22,4 +22,4 @@ case "${secondcore}" in
     ;;
 esac;
 
-echo $secondcore
+echo ${secondcore}

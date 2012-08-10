@@ -1,10 +1,10 @@
 #!/sbin/busybox sh
 
-if [ "a$2" == "a" ];then
+if [ "a${2}" == "a" ];then
   echo $chargecurrent
 else
-  chargecurrent=$2
-  echo $chargecurrent
+  chargecurrent="${2}"
+  echo "${chargecurrent}"
 fi
 
 if [ -f /sys/devices/virtual/misc/charge_current/charge_current ];then

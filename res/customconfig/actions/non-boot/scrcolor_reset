@@ -1,0 +1,25 @@
+#!/sbin/busybox sh
+#
+
+case "${2}" in
+	0)
+		echo
+		sleep 1
+		;;
+	1)
+		PROFILE="$(cat /data/.dream/.active.profile).profile"
+		echo "Active Profile: ${PROFILE}"
+		echo "137" > /sys/devices/platform/samsung-pd.2/mdnie/mdnie/mdnie/user_cb
+		echo "120" > /sys/devices/platform/samsung-pd.2/mdnie/mdnie/mdnie/user_cr
+		am force-stop com.darekxan.extweaks.app
+		sed -ir 's|user_cb=[0-9]*|user_cb=137|g' /data/.dream/${PROFILE}
+		sed -ir 's|user_cr=[0-9]*|user_cr=120|g' /data/.dream/${PROFILE}
+		am start -a android.intent.action.MAIN -n com.darekxan.extweaks.app/.ExTweaksActivity
+		# echo "user_cb changed to: $(cat /data/.dream/${PROFILE} | grep user_cb)"
+		# echo "user_cr changed to: $(cat /data/.dream/${PROFILE} | grep user_cr)"
+		echo "Screen Colors have been reseted to default values..."
+		;;
+	*)
+		echo "Usage, $0 (arg) Args: 0 (does nothing), 1 (resets Screen Colors)"
+		;;
+esac;

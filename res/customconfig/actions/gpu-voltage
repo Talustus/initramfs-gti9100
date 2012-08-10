@@ -1,12 +1,12 @@
 #!/sbin/busybox sh
 
-if [ "a$3" == "a" ];then
-  evalcmd='eval "echo \$GPUVOLT$2"'
+if [ "a${3}" == "a" ];then
+  evalcmd='eval "echo \$GPUVOLT${2}"'
   eval $evalcmd
 else
-  evalcmd='eval "GPUVOLT$2=$3"'
+  evalcmd='eval "GPUVOLT${2}=${3}"'
   eval $evalcmd
-  evalcmd='eval "echo \$GPUVOLT$2"'
+  evalcmd='eval "echo \$GPUVOLT${2}"'
   eval $evalcmd
 fi
 

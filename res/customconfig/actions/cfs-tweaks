@@ -1,7 +1,7 @@
 #!/sbin/busybox sh
 
-if [ "a$2" != "a" ];then
-  cfs_tweaks=$2
+if [ "a${2}" != "a" ];then
+  cfs_tweaks=${2}
 fi
 
 mount -o remount,rw /
@@ -26,4 +26,4 @@ esac;
 
 mount -o remount,ro /
 
-echo $cfs_tweaks
+echo ${cfs_tweaks}

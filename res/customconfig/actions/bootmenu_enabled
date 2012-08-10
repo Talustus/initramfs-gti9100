@@ -1,14 +1,14 @@
 #!/sbin/busybox sh
 
-if [ "a$2" != "a" ];then
-  bootmenu_enabled=$2
+if [ "a${2}" != "a" ];then
+  bootmenu_enabled="${2}"
 
   case "${bootmenu_enabled}" in
     0)
 	touch /mnt/sdcard/.nobootlogo
       ;;
     1)
-	if /sbin/busybox [ -f /mnt/sdcard/.nobootlogo ];
+	if [ -f "/mnt/sdcard/.nobootlogo" ];
 	then
 	  rm /mnt/sdcard/.nobootlogo
 	fi
@@ -16,4 +16,4 @@ if [ "a$2" != "a" ];then
   esac;
 fi
 
-echo ${bootmenu_enabled}
+echo "${bootmenu_enabled}"

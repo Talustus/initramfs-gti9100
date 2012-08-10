@@ -142,48 +142,79 @@
 
   </settingsTab>
 
+  <!-- Headphone SoundBoost -->
   <settingsTab name="Audio">
     <settingsPane description="Headphone Amplification Settings" name="Headphone Amplification">
-      <seekBar description="Headphone Amplifier Level (0-3 which corresponds to 0-1.5-3-6dB)" 
-		name="Headphone Amplifier" action="soundgasm_hp" unit="" min="0" reversed="false" step="1" max="3"/>
+      <seekBar description="Headphone Amplifier Level (0-3 which corresponds to 0-1.5-3-6dB)"
+                name="Headphone Amplifier" action="soundgasm_hp" unit="" min="0" reversed="false" step="1" max="3"/>
+
     </settingsPane>
   </settingsTab>
 
+  <!-- General Screen Settings -->
   <settingsTab name="Screen">
+
+    <!-- Brightness Settings -->
     <settingsPane description="Brightness Curve settings which modify auto-brightness behavior." name="Brightness Curve">
        <seekBar description="Sets touchscreen move sensitivity (vitalij value)." 
 		name="TouchMove Sensitivity" action="generic /sys/devices/platform/s3c2440-i2c.3/i2c-3/3-004a/mov_hysti" unit=" pixel" min="0" reversed="false" step="1" max="20"/>
+
        <seekBar description="Setting min_bl higher will result in staying lowest brightness level for brighter conditions (default 30)" 
 		name="min_bl" action="generic /sys/class/misc/brightness_curve/min_bl" unit="" min="0" reversed="false" step="10" max="150"/>
+
        <seekBar description="Minimum brightness level (default 0)" 
 		name="min_gamma" action="generic /sys/class/misc/brightness_curve/min_gamma" unit="" min="0" reversed="false" step="1" max="24"/>
+
        <seekBar description="Maximum brightness level (default 24)" 
 		name="max_gamma" action="generic /sys/class/misc/brightness_curve/max_gamma" unit="" min="0" reversed="false" step="1" max="24"/>
     </settingsPane>
+
+    <!-- Screen Color Settings -->
+    <settingsPane description="User definied Screen Colors" name="Manual Screen Color Settings">
+	<seekBar description="Sets screen BLUE color scale (Default is 137)" 
+		name="Blue Color Scale" action="generic /sys/devices/platform/samsung-pd.2/mdnie/mdnie/mdnie/user_cb" 
+		unit="" min="0" reversed="false" step="1" max="244"/>
+	<seekBar description="Sets screen RED color scale (Default is 120)" 
+		name="Red Color Scale" action="generic /sys/devices/platform/samsung-pd.2/mdnie/mdnie/mdnie/user_cr" 
+		unit="" min="0" reversed="false" step="1" max="244"/>
+
+	<button description="Push to reset screen color to default (This will force Extweaks to Restart)" 
+		name="Reset Color to Default" action="non-boot/scrcolor_reset 1" label="Default Color"/>
+    </settingsPane>
+
     <settingsPane description="Other Settings" name="Other Settings">
+       <!-- LCD Power Saving -->
 	<checkbox description="Enable LCD-Powersaving Mode" name="LCD-Powersaving Mode" 
 		action="generic01 /sys/class/lcd/panel/power_reduce" label="LCD-Powersaving Mode" />
 
+       <!-- Gamma shift -->
        <seekBar description="User adjustable gamma shift." 
-		name="Gamma Shift" action="generic /sys/devices/platform/samsung-pd.2/s3cfb.0/spi_gpio.3/spi_master/spi3/spi3.0/lcd/panel/user_gamma_adjust" unit="" min="-50" reversed="false" step="5" max="50"/>
+		name="Gamma Shift" action="generic /sys/devices/platform/samsung-pd.2/s3cfb.0/spi_gpio.3/spi3.0/lcd/panel/user_gamma_adjust" unit="" min="-50" reversed="false" step="5" max="50"/>
+
+       <!-- Vibration intensity level -->
        <seekBar description="Vibration intensity level (default 6)" 
 		name="Vibration Intensity" action="generic /sys/devices/platform/tspdrv/vibrator_level" unit="" min="0" reversed="false" step="1" max="6"/>
 
-	<checkbox description="Enable inverting the screen colors by quickly pressing Home button several times (Count can be configured below)" 
-		name="mDNIe Negative Toggle" action="generic01 /sys/module/gpio_keys/parameters/mdnie_shortcut_enabled" label="mDNIe Negative Toggle"/>
-	<spinner description="Negative Color, Screen effect settings, Fast Click Home for number of times configured to activate MOD" 
-		name="Negative Screen inverting." action="negative_screen">
-		<spinnerItem name="Set 4 Clicks (default)" value="1"/>
-		<spinnerItem name="Set 5 Clicks" value="2"/>
-		<spinnerItem name="Set 6 Clicks" value="3"/>
-		<spinnerItem name="Feature Disabled" value="4"/>
+       <!-- negative Screen -->
+	<checkbox description="Enable inverting the screen colors by quickly pressing Home button several times (Count can be configured below)" name="mDNIe Negative Toggle" action="generic01 /sys/module/gpio_keys/parameters/mdnie_shortcut_enabled" label="mDNIe Negative Toggle"/>
+
+       <!-- negative Screen -->
+	<spinner description="Negative Color, Screen effect settings, Fast Click Home for number of times configured to activate MOD" name="Negative Screen inverting." action="negative_screen">
+		<spinnerItem name="Set 4 Clicks (default)" value="1" />
+		<spinnerItem name="Set 5 Clicks" value="2" />
+		<spinnerItem name="Set 6 Clicks" value="3" />
+		<spinnerItem name="Feature Disabled" value="4" />
 	</spinner>
     </settingsPane>
   </settingsTab>
 
   <settingsTab name="BLN">
     <settingsPane description="BackLightNotification and Touchkey related Settings" name="BackLightNotification">
+
+       <!-- BLN: enable/disable BLN -->
        <checkbox description="BackLightNotification" name="BLN" action="generic /sys/class/misc/notification/notification_enabled" label="BLN"/>
+
+       <!-- BLN: Notification Timeout -->
        <spinner description="Notification timeout. 0: disabled" name="notification_timeout" action="generic /sys/class/misc/notification/notification_timeout">
              <spinnerItem name="Never timeout" value="0"/> 
              <spinnerItem name="1 minute" value="60000"/> 
@@ -195,38 +226,45 @@
              <spinnerItem name="60 minutes" value="3600000"/> 
              <spinnerItem name="120 minutes" value="7200000"/> 
        </spinner>
+
+       <!-- BLN: BLN Effect -->
        <spinner description="This setting will set led behavior in BLN." name="BLN Effect" action="bln_effect">
              <spinnerItem name="Steady" value="0"/> 
              <spinnerItem name="Breathing" value="1"/> 
              <spinnerItem name="Blinking" value="2"/> 
        </spinner> 
-       <spinner description="Led timeout. Leave it disabled if your ROM already has led timeout support. In CM9, if you have lights enabled screen brightness changes may trigger lights on. It is normal. If you want them to stay disabled you have to disable leds in CM9 menu." name="led_timeout" action="generic /sys/class/misc/notification/led_timeout">
+
+       <!-- BLN: LED Timeout -->
+       <spinner description="Led timeout. Leave it disabled if your ROM already has led timeout support. In CM9/10, if you have lights enabled screen brightness changes may trigger lights on. It is normal. If you want them to stay disabled you have to disable leds in CM9/10 menu." name="led_timeout" action="generic /sys/class/misc/notification/led_timeout">
              <spinnerItem name="Disabled" value="0"/> 
-             <spinnerItem name="1.5 sec" value="1500"/> 
+             <spinnerItem name="1 sec" value="1000"/> 
              <spinnerItem name="3 sec" value="3000"/> 
              <spinnerItem name="6 sec" value="6000"/> 
              <spinnerItem name="15 sec" value="15000"/> 
              <spinnerItem name="30 sec" value="30000"/> 
              <spinnerItem name="60 sec" value="60000"/> 
        </spinner>
+
+       <!-- BLN: LED Fadeout -->
        <checkbox description="Led fadeout effect. If you are on a Samsung ROM, you need to set touchkey leds to always on or always off and use led timeout in ExTweaks." name="led-fadeout" action="generic /sys/class/misc/notification/led_fadeout" label="led-fadeout"/>
+
+       <!-- BLN: LEDs on with Screen -->
        <checkbox description="Selecting this will activate turning touckey leds on when you touch the screen (only when led timeout is enabled)." name="Leds on with touch" action="generic /sys/class/misc/notification/led_on_touch" label="led-on-touch"/>
+
+       <!-- BLN: TEST BLN -->
        <button description="Use this button to test bln. BLN will be active after you turn the screen off." name="Test BLN" action="test-bln" label="Test BLN"/>
+
+       <!-- BLN: TouchPad brightness -->
        <seekBar description="Controls touchpad led voltage level (default: 3000)" 
 		name="Led Voltage Level" action="generic /sys/devices/virtual/sec/sec_touchkey/touchkey_brightness" unit=" mV" min="2500" reversed="false" step="50" max="3300"/>
     </settingsPane>
   </settingsTab>
   <settingsTab name="Misc">
     <settingsPane description="Misc Settings" name="Misc Settings">
-      <!-- button description="Back up the efs partition" name="BackupEFS" action="efs-backup" label="Backup EFS"/ -->
+      <!-- Android Logger -->
       <checkbox description="Enable or Disable Android Logger (needs restart)" name="Android Logger" action="generic /tmp/logger" label="Android Logger"/>
-      <!-- spinner description="This will set the suspend frequency used in ondemand governor to have ondemandX behaviour. This will only be set during early stages of booting (before init.d execution) and can be overriden by later scripts or apps and only effective while ondemand governor is in use." name="Default Ondemand Suspend Freq." action="generic /sys/devices/system/cpu/cpufreq/ondemand/suspend_freq">
-             <spinnerItem name="1200MHz" value="1200000"/> 
-             <spinnerItem name="1000MHz" value="1000000"/> 
-             <spinnerItem name="800MHz" value="800000"/> 
-             <spinnerItem name="500MHz" value="500000"/> 
-             <spinnerItem name="200MHz" value="200000"/> 
-      </spinner -->
+
+      <!-- Default I/O Sheduler -->
       <spinner description="This will set the default I/O scheduler. Default I/O scheduler will only be set during early stages of booting (before init.d execution) and can be overriden by later scripts or apps." name="Default I/O Scheduler" action="generic /sys/block/mmcblk0/queue/scheduler">
              <spinnerItem name="sio" value="sio"/> 
              <spinnerItem name="noop" value="noop"/> 
@@ -234,24 +272,48 @@
              <spinnerItem name="vr" value="vr"/> 
              <spinnerItem name="cfq" value="cfq"/> 
       </spinner>
+
+      <!-- Charger Settings -->
       <spinner description="Charge current setting" name="Charge Current" action="chargecurrent">
              <spinnerItem name="AC:650mA, Misc,USB:450mA (Stock)" value="1"/> 
              <spinnerItem name="AC,Misc:650mA, USB:450mA" value="2"/> 
              <spinnerItem name="All:650mA (risky for USB ports)" value="3"/> 
       </spinner>
+
+      <!-- USB Connection Mode -->
       <spinner description="Change USB connection mode. Either leave it as default or force it to mass storage mode (you will see your sdcards as disks) or mtp" name="USB Mass Storage Mode" action="usb-mode">
              <spinnerItem name="Default" value="default"/> 
              <spinnerItem name="Force Mass Storage Mode" value="mass_storage-adb"/> 
              <spinnerItem name="Force MTP Mode" value="mtp-adb"/> 
       </spinner>
+
+      <!-- Exclusive WakeLock Stats -->
       <checkbox description="If checked, BetterBatteryStatus will report exclusive (non-overlapping) wakelock statistics." name="Exclusive Wakelock Stats" action="generic01 /sys/module/wakelock/parameters/default_stats" label="Exclusive Wakelock Stats"/>
       <button description="If you think that the fuel gauge chip is behaving weird use this button to reset it. Give it a few hours after you reset the gauge. It may still show you funny values for those period, then the battery percentage should be fine." name="Reset Fuel-Gauge Chip" action="reset-fuelgauge" label="Reset Fuel-Gauge Chip"/>
+
+      <!-- EXPERIMENTAL: zRam support (dorimanx) -->
+      <spinner description="ZRAM (Compressed swap space) size (This is a Experimental feature)" name="ZRAM Size" action="zram">
+             <spinnerItem name="disabled" value="0"/> 
+             <spinnerItem name="100MB" value="100"/> 
+             <spinnerItem name="150MB" value="150"/> 
+             <spinnerItem name="200MB" value="200"/> 
+             <spinnerItem name="250MB" value="250"/> 
+             <spinnerItem name="300MB" value="300"/> 
+      </spinner>
+
+      <!-- EXPERIMENTAL: zRam Stats (dorimanx) -->
+      <button description="Show zRam Stats" 
+		name="zRam Stats" action="non-boot/zramstats" label="zRam Stats" />
     </settingsPane>
+
+    <!-- Remove/Install root -->
     <settingsPane description="Removing/Reinstalling root to support some apps which requires you not to have a rooted phone." name="Remove/Reinstall Root">
       <button description="Removes su and Superuser.apk files from the system partition" name="Remove Root" action="remove-root" label="Remove Root"/>
       <button description="Tries to reinstall root. If this fails, please check auto-install root checkbox and restart." name="Install  Root" action="install-root" label="Install Root"/>
       <checkbox description="If checked, installs root on the next restart." name="Auto-Install Root" action="generic /tmp/install_root" label="Auto-Install Root"/>
     </settingsPane>
+
+    <!-- Bootmenu Settings -->
     <settingsPane description="Enable or Disable the BootMenu" name="Boot Menu">	
        <spinner description="This setting enables/disables the BootMenu and logo NOTE: You will not be able to boot the second rom while BootMenu is disabled" name="Enable Bootmenu" action="bootmenu_enabled">
              <spinnerItem name="BootMenu Enabled" value="1"/> 

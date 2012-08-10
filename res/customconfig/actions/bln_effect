@@ -1,7 +1,7 @@
 #!/sbin/busybox sh
 
-if [ "a$2" != "a" ];then
-  bln_effect=$2
+if [ "a${2}" != "a" ];then
+  bln_effect=${2}
 
   case "${bln_effect}" in
     0) 

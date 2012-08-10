@@ -1,21 +1,21 @@
 #!/sbin/busybox sh
 
-if [ "a$2" == "a" ];then
+if [ "a${2}" == "a" ];then
 exit
 fi
 
-filename=$(basename $2)
+filename=$(basename ${2})
 
 if [ "a$3" == "a" ];then
-  evalcmd='eval "echo \$$filename"'
+  evalcmd='eval "echo \$${filename}"'
   eval $evalcmd
 else
-  evalcmd='eval "$filename=$3"'
+  evalcmd='eval "${filename}=${3}"'
   eval $evalcmd
-  evalcmd='eval "echo \$$filename"'
+  evalcmd='eval "echo \$${filename}"'
   eval $evalcmd
-  if [ -f $2 ];then
-    echo $3 > $2
+  if [ -f "${2}" ];then
+    echo "${3}" > ${2}
   fi
 fi
 

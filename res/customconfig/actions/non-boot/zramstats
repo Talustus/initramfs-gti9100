@@ -1,0 +1,18 @@
+#!/sbin/busybox sh
+#
+# zram support forked from Dorimanx
+# adjusted for DreamKernel ...
+# this is experimental ...
+
+if [ -e /system/xbin/bash ]; 
+then
+  /sbin/zramstats
+elif [ -e /system/bin/bash ]; 
+then
+  # Change interpreter !!
+  sed -i 's|#!/system/xbin/bash|#!/system/bin/bash|g' /sbin/zramstats
+  /sbin/zramstats
+else
+  free
+  cat /proc/swaps
+fi;

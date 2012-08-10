@@ -22,10 +22,14 @@ apply_config()
 {
 while read_dom; do
 action=$(echo $ENTITY |  grep -v \<button | sed -e 's/action=/\naction=/g' |grep action|awk -F'"' '{print $2}')
-if [ "a$action" != a ];then
-  actionval=`/res/uci.sh $action`
-  echo applying: /res/uci.sh $action $actionval
-  eval /res/uci.sh $action $actionval
+if [ "a${action}" != a ];
+then
+  if [ "${action}" != "non-boot/scrcolor_reset 1" ];
+  then
+    actionval=`/res/uci.sh $action`
+    echo applying: /res/uci.sh $action $actionval
+    eval /res/uci.sh $action $actionval
+  fi
 fi
 done < $CONFIG_XML
 }
@@ -49,20 +53,20 @@ select_profile()
     # if there is no such profile, create one
     _ACTIVE_PROFILE=`cat $ACTIVE_PROFILE`
     if [ ! -f ${PROFILE_PATH}/${_ACTIVE_PROFILE}.profile ];then
-      cp $DEFAULT_PROFILE ${PROFILE_PATH}/${1}.profile
-      [ "$_ACTIVE_PROFILE" == "battery" ] && cp $BATTERY_PROFILE ${PROFILE_PATH}/${1}.profile
-      [ "$_ACTIVE_PROFILE" == "performance" ] && cp $PERFORMANCE_PROFILE ${PROFILE_PATH}/${1}.profile
+      cp ${DEFAULT_PROFILE} ${PROFILE_PATH}/${1}.profile
+      [ "${_ACTIVE_PROFILE}" == "battery" ] && cp ${BATTERY_PROFILE} ${PROFILE_PATH}/${1}.profile
+      [ "${_ACTIVE_PROFILE}" == "performance" ] && cp ${PERFORMANCE_PROFILE} ${PROFILE_PATH}/${1}.profile
     fi
     if [ ! -f ${PROFILE_PATH}/${1}.profile ];then
       cp ${PROFILE_PATH}/${_ACTIVE_PROFILE}.profile ${PROFILE_PATH}/${1}.profile
     fi
-    echo $1 > $ACTIVE_PROFILE
+    echo $1 > ${ACTIVE_PROFILE}
   fi
 }
 
 delete_profile()
 {
-  if [ "`cat $ACTIVE_PROFILE`" == "$1" ];then
+  if [ "`cat $ACTIVE_PROFILE`" == "${1}" ];then
     select_profile "default"
   fi
   rm ${PROFILE_PATH}/${1}.profile
@@ -75,7 +79,7 @@ rename_profile()
 
   # if old profile is active, set the new profile as active profile
   if [ "`cat $ACTIVE_PROFILE`" == "$1" ];then
-    echo $2 > $ACTIVE_PROFILE
+    echo $2 > ${ACTIVE_PROFILE}
   fi
 }
 

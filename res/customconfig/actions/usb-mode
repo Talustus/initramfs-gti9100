@@ -1,7 +1,7 @@
 #!/sbin/busybox sh
 
-if [ "a$2" != "a" ];then
-  usb_mode=$2
+if [ "a${2}" != "a" ];then
+  usb_mode="${2}"
 
   case "${usb_mode}" in
     default) 

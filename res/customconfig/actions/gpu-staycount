@@ -1,15 +1,15 @@
 #!/sbin/busybox sh
 
-if [ "a$3" == "a" ];then
+if [ "a${3}" == "a" ];then
   # echo only
-  evalcmd='eval "echo \$GPUSTAYCOUNT$2"'
+  evalcmd='eval "echo \$GPUSTAYCOUNT${2}"'
   eval $evalcmd
 else
   # set the value
-  evalcmd='eval "GPUSTAYCOUNT$2=$3"'
+  evalcmd='eval "GPUSTAYCOUNT${2}=${3}"'
   eval $evalcmd
   # echo back
-  evalcmd='eval "echo \$GPUSTAYCOUNT$2"'
+  evalcmd='eval "echo \$GPUSTAYCOUNT${2}"'
   eval $evalcmd
 fi
 
