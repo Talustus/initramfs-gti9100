@@ -21,12 +21,12 @@ on boot
     chown radio system /sys/devices/virtual/misc/melfas_touchkey/brightness
     chmod 0660 /sys/devices/virtual/misc/melfas_touchkey/brightness
 
-#panorama directory creation
+    # panorama directory creation
     mkdir /data/pxtmpdir 0775
     chown system system /data/pxtmpdir
     chmod 0775 /data/pxtmpdir
 
-# Permissions for dvfs lock
+    # Permissions for dvfs lock
     chown system system /sys/power/cpufreq_max_limit
     chown system system /sys/power/cpufreq_min_limit
     chmod 0660 /sys/power/cpufreq_max_limit
@@ -41,22 +41,25 @@ on boot
     setprop ro.product.device GT-I9100
     setprop ro.radio.noril yes
 
-# Permisions for sensors
+    # Permisions for sensors
     chown radio system /sys/devices/virtual/K3G_GYRO-dev/k3g/gyro_selftest
     chown radio system /sys/devices/virtual/K3G_GYRO-dev/k3g/gyro_get_temp
     chown radio system /sys/devices/virtual/K3G_GYRO-dev/k3g/gyro_power_on
     chown radio system /sys/devices/virtual/accelerometer/accelerometer/acc_file
     chown radio system /sys/devices/virtual/sec/gsensorcal/calibration
 
-# permissions for NFC
+    # permissions for NFC
     setprop ro.nfc.port "I2C"
     chmod 0600 /dev/pn544
     chown nfc nfc /dev/pn544
 
-# Device Encryption by B2B Security Lab. 
+    # Permission for MHL
+    chown system radio /sys/class/mhl/test_result
+
+    # Device Encryption by B2B Security Lab.
     setprop ro.crypto.keyfile.userdata /efs/metadata
     
-# fake some battery state
+    # fake some battery state
     setprop status.battery.state Slow
     setprop status.battery.level 5
     setprop status.battery.level_raw  50
