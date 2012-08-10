@@ -89,7 +89,6 @@ JELLY=0
 if [ "$JELLY" == 1 ];
 then
   echo 1 > /proc/sys/kernel/rom_feature_set
-  umount /system
   rm /sbin/init.samsung
   mv /sbin/init.jb /sbin/init.samsung
 else
@@ -108,7 +107,6 @@ else
   if [ "$AOSP" == 1 ];
   then
     echo 1 > /proc/sys/kernel/rom_feature_set
-    umount /system
     rm /sbin/init.samsung
     mv /sbin/init.cm /sbin/init.samsung
   else
@@ -137,6 +135,35 @@ else
     sed -i 's|STOCK|Sense4All|g' sbin/init.samsung
   fi
 fi
+
+## SGH-i777 MIC Swap FIX
+# EXPERIMENTAL !!
+# We can fix the SGH-I777 Mic Swap Issue here
+
+#uname -r | grep 'I777'
+#
+#if [ "$?" == "0" ];
+#then
+#  echo "Found I777 Machine Checking libaudio"
+#  mount -o remount,rw /
+#  xzcat /res/misc/libaudio.tar.xz > /tmp/libaudio.tar
+#  mkdir /tmp/libaudio
+#  cd /tmp/libaudio
+#  tar xf ../libaudio.tar
+#  LIBAUDIOMD51=`md5sum /system/lib/libmediayamaha.so`
+#  LIBAUDIOMD52=`md5sum /tmp/libaudio/libmediayamaha.so`
+#  if [ "a${LIBAUDIOMD51}" != "a${LIBAUDIOMD52}" ];
+#  then
+#    echo "Updating libaudio ..."
+#    cp -ax /tmp/libaudio/* /system/lib/
+#  else
+#    echo "libaudio already up to date ..."
+#  fi
+#  rm -rf /tmp/libaudio /tmp/libaudio.tar /res/misc/libaudio.tar.xz
+# cd /
+#else
+#  echo "no I777 Machine assuming GT-I9100"
+#fi
 
 busybox umount /system
 exec /sbin/init.samsung $SECONDROM
