@@ -214,6 +214,11 @@ on post-fs-data
     # the following directory.
     mkdir /data/drm 0775 drm drm
 
+    # IMEI
+    mkdir /efs/imei 0775
+    chown radio system /efs/imei
+    chmod 0775 /efs/imei
+
     # If there is no fs-post-data action in the init.<device>.rc file, you
     # must uncomment this line, otherwise encrypted filesystems
     # won't work.
