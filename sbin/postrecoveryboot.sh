@@ -1,1 +1,1 @@
-#!/sbin/ext/busybox sh
+#!/sbin/busybox sh

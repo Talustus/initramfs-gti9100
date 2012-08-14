@@ -1,7 +1,7 @@
-#!/sbin/ext/busybox sh
+#!/sbin/busybox sh
 
 if test "$1" = ''; then
-	/sbin/ext/reboot normal
+	/sbin/reboot normal
 else
-	/sbin/ext/reboot $*
+	/sbin/reboot $*
 fi;

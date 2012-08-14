@@ -1,5 +1,5 @@
-#!/sbin/ext/busybox sh
-/sbin/ext/busybox mount -t rootfs -o remount,rw rootfs 
+#!/sbin/busybox sh
+/sbin/busybox mount -t rootfs -o remount,rw rootfs 
 mkdir -p /customkernel/property 
 echo true >> /customkernel/property/customkernel.cf-root 
 echo true >> /customkernel/property/customkernel.base.cf-root 
@@ -11,4 +11,4 @@ echo true >> /customkernel/property/customkernel.bootani.zip
 echo true >> /customkernel/property/customkernel.bootani.bin 
 echo true >> /customkernel/property/customkernel.cwm 
 echo 5.5.0.4 >> /customkernel/property/customkernel.cwm.version 
-/sbin/ext/busybox mount -t rootfs -o remount,ro rootfs 
+/sbin/busybox mount -t rootfs -o remount,ro rootfs 

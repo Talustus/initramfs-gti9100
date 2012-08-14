@@ -77,8 +77,6 @@ mkdir /mnt/ntfs
 mount -t tmpfs tmpfs /mnt/ntfs
 chmod 777 /mnt/ntfs
 
-## /sbin/busybox sh /sbin/ext/busybox.sh
-
 /sbin/busybox sh /sbin/ext/properties.sh
 
 /sbin/busybox sh /sbin/ext/install.sh
