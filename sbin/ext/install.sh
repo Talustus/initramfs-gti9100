@@ -1,5 +1,5 @@
 #!/sbin/busybox sh
-# DreamKernel v1.x Bin installer
+# DreamKernel v2.x Bin installer
 # Script by gokhanmoral
 # i do not tak any Credits for this ! Talustus
 
