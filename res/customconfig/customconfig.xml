@@ -279,7 +279,7 @@
              <spinnerItem name="deadline" value="deadline"/> 
              <spinnerItem name="vr" value="vr"/> 
              <spinnerItem name="cfq" value="cfq"/>
-             <spinnerItem name="row" value="row"/>  
+             <!-- <spinnerItem name="row" value="row"/>  -->
       </spinner>
       <!-- Charger Settings -->
       <spinner description="Charge current setting" name="Charge Current" action="chargecurrent">
@@ -299,7 +299,7 @@
       <!-- Full gauge chip reset -->
       <button description="If you think that the fuel gauge chip is behaving weird use this button to reset it. Give it a few hours after you reset the gauge. It may still show you funny values for those period, then the battery percentage should be fine." name="Reset Fuel-Gauge Chip" action="reset-fuelgauge" label="Reset Fuel-Gauge Chip"/>
 
-      <!-- EXPERIMENTAL: zRam support (dorimanx) -->
+      <!-- EXPERIMENTAL: zRam support (gokhanmoral) -->
       <spinner description="ZRAM (Compressed swap space) size (This is a Experimental feature)" name="ZRAM Size" action="zram">
              <spinnerItem name="disabled" value="0"/> 
              <spinnerItem name="100MB" value="100"/> 
@@ -308,7 +308,7 @@
              <spinnerItem name="250MB" value="250"/> 
              <spinnerItem name="300MB" value="300"/> 
       </spinner>
-      <!-- EXPERIMENTAL: zRam Stats (dorimanx) -->
+      <!-- EXPERIMENTAL: zRam Stats (gokhanmoral) -->
       <button description="Show zRam Stats" name="zRam Stats" action="non-boot/zramstats" label="zRam Stats" />
     </settingsPane>
 
