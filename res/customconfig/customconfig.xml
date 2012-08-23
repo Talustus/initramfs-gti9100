@@ -5,39 +5,43 @@
 		name="CPU Scaling Settings">
       <!-- CPUFREQ Governor Settings -->
       <spinner description="This will set the default CPU governor. Default CPU governor will only be set during early stages of booting (before init.d execution) and can be overriden by later scripts or apps." name="Default CPU Governor" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor">
-             <spinnerItem name="pegasusq" value="pegasusq"/> 
-             <spinnerItem name="hotplug" value="hotplug"/> 
-             <spinnerItem name="ondemand" value="ondemand"/> 
-             <spinnerItem name="conservative" value="conservative"/> 
-             <spinnerItem name="lulzactive" value="lulzactive"/> 
-             <spinnerItem name="smartassV2" value="smartassV2"/> 
-             <spinnerItem name="interactive" value="interactive"/> 
+		<spinnerItem name="pegasusq" value="pegasusq"/>
+		<spinnerItem name="hotplug" value="hotplug"/>
+		<spinnerItem name="ondemand" value="ondemand"/>
+		<spinnerItem name="conservative" value="conservative"/>
+		<spinnerItem name="lulzactive" value="lulzactive"/>
+		<spinnerItem name="smartassV2" value="smartassV2"/>
+		<spinnerItem name="interactive" value="interactive"/>
+		<spinnerItem name="lagfree" value="lagfree"/>
+		<spinnerItem name="scary" value="scary"/>
+		<spinnerItem name="sleepy" value="sleepy"/>
        </spinner>
 	<!-- CPU Frequency Settings -->
 	<spinner description="This setting controls avaible CPU steps for frequency scaling. (Restart required)" name="CPU Step Counts" action="generic /tmp/cpustepcount">
-             <spinnerItem name="5 (200,500,800,1000,1200MHz)" value="5"/> 
-             <spinnerItem name="6 (5-steps + 1400MHz)" value="6"/> 
-             <spinnerItem name="7 (6-steps + 1500MHz)" value="7"/> 
-             <spinnerItem name="8 (6-steps + 100MHz + 1600MHz)" value="8"/> 
-             <spinnerItem name="9 (8-step + 1500MHz)" value="9"/> 
-             <spinnerItem name="All available (18)" value="18"/> 
+		<spinnerItem name="5 (200,500,800,1000,1200MHz)" value="5"/>
+		<spinnerItem name="6 (5-steps + 1400MHz)" value="6"/>
+		<spinnerItem name="7 (6-steps + 1500MHz)" value="7"/>
+		<spinnerItem name="8 (6-steps + 100MHz + 1600MHz)" value="8"/>
+		<spinnerItem name="9 (8-step + 1500MHz)" value="9"/>
+		<spinnerItem name="All available (18)" value="18"/>
       </spinner>
 
     	<!-- MAX/MIN CPU Frequency Settings -->
-       <seekBar description="Scaling maximum frequency (Samsung default: 1200MHz)"
-		name="scaling_max_freq" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq" unit=" Mhz" min="100000" reversed="false" step="100000" max="1600000"/>
-       <seekBar description="Scaling minimum frequency (Samsung default: 200MHz)"
-		name="scaling_min_freq" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq" unit=" Mhz" min="100000" reversed="false" step="100000" max="1600000"/>
+       <seekBar description="Scaling maximum frequency (Max: 1600MHz, Samsung default: 1200MHz)"
+		name="scaling_max_freq" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq" unit=" KHz" min="100000" reversed="false" step="100000" max="1600000"/>
+       <seekBar description="Scaling minimum frequency (Min: 100MHz (50 and 25 can be set via setCPU...), Samsung default: 200MHz)"
+		name="scaling_min_freq" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq" unit=" KHz" min="100000" reversed="false" step="100000" max="1600000"/>
+
 	<seekBar description="Maximum DEEPSLEEP frequency (500 or 600, default is 600MHz)" 
-		name="scaling_max_suspend_freq" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_suspend_freq" unit="kHz" min="500000" reversed="false" step="100000" max="600000"/>
+		name="scaling_max_suspend_freq" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_suspend_freq" unit="KHz" min="500000" reversed="false" step="100000" max="600000"/>
 	<seekBar description="Minimum DEEPSLEEP frequency (default is 200MHz)" 
-		name="scaling_min_suspend_freq" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_suspend_freq" unit="kHz" min="100000" reversed="false" step="100000" max="600000"/>
+		name="scaling_min_suspend_freq" action="generic /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_suspend_freq" unit="KHz" min="100000" reversed="false" step="100000" max="600000"/>
 
       <spinner description="Smooth scaling level which prevents ondemand based governors to jump directly to maximum frequency with load spikes. This setting will only change the behavior of ondemand and pegasusq governors." name="Smooth Scaling Level" action="generickmem smooth_level 0 int">
-             <spinnerItem name="1600MHz" value="0"/> 
-             <spinnerItem name="1200MHz" value="4"/> 
-             <spinnerItem name="1000MHz" value="6"/> 
-             <spinnerItem name="800MHz" value="8"/> 
+		<spinnerItem name="1600MHz" value="0"/>
+		<spinnerItem name="1200MHz" value="4"/>
+		<spinnerItem name="1000MHz" value="6"/>
+		<spinnerItem name="800MHz" value="8"/>
       </spinner>
     </settingsPane>
 
@@ -45,9 +49,9 @@
     <settingsPane description="The following settings control CPU hotplug parameters. Depending on the following parameters, the second core is enabled or disabled." 
 		name="CPU Hotplug Settings">
        <spinner description="Sets the CPU Hotplug Mode. Hotplug mode will dynamically switch the second core on and off. Using second core always-off or always-on modes will make the other hotplug parameters useless." name="Hotplug Mode" action="secondcore">
-             <spinnerItem name="CPU Hotplug (default)" value="hotplug"/> 
-             <spinnerItem name="Second core always-off" value="always-off"/> 
-             <spinnerItem name="Second core always-on" value="always-on"/> 
+		<spinnerItem name="CPU Hotplug (default)" value="hotplug"/>
+		<spinnerItem name="Second core always-off" value="always-off"/>
+		<spinnerItem name="Second core always-on" value="always-on"/>
        </spinner>
 
        <!-- Load/Run Queue based hotpluging -->
@@ -279,6 +283,7 @@
              <spinnerItem name="deadline" value="deadline"/> 
              <spinnerItem name="vr" value="vr"/> 
              <spinnerItem name="cfq" value="cfq"/>
+             <spinnerItem name="bfq" value="bfq"/>
              <!-- <spinnerItem name="row" value="row"/>  -->
       </spinner>
       <!-- Charger Settings -->
