@@ -1,7 +1,7 @@
 #!/sbin/busybox sh
 
 BMODE=$1
-echo "found Cyanogen System, booting up Mode: $BMODE"
+echo "found CM9 System, booting up Mode: $BMODE"
 
 export _PATH="$PATH"
 export PATH=/sbin
@@ -19,20 +19,19 @@ rm /init.smdk4210.usb.rc
 rm /ueventd.rc
 rm /ueventd.smdk4210.rc
 
-rm /innt
 rm /init
+rm /innt
 
-busybox cp -a /res/misc/cyano/* /
+busybox cp -a /res/misc/cm9/* /
 
 if [ "$BMODE" == "1" ];
 then
   echo "2ndROM Boot"
   rm /init.smdk4210.rc
   mv /init.smdk4210.rc.2 /init.smdk4210.rc
-  # mount -t vfat /dev/block/mmcblk0p11 /mnt/.secondrom
 fi
 
 busybox date >>/boot-log.txt
-busybox rm -fr /res/misc/cyano /dev/*
+busybox rm -fr /res/misc/cm9 /dev/*
 export PATH="${_PATH}"
 exec /init

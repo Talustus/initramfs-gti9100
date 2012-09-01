@@ -1,0 +1,27 @@
+#!/sbin/busybox sh
+
+BMODE=$1
+echo "found JellyBean based System, booting up... BootMode: $BMODE"
+
+rm /default.prop
+rm /init.goldfish.rc
+rm /init.rc
+rm /init.rc.2
+rm /init.smdk4210.rc
+rm /init.smdk4210.usb.rc
+cp -a /res/misc/jelly/* /
+
+if [ "$BMODE" == "1" ];
+then
+  rm /init.rc
+  mv /init.rc.2 /init.rc 
+fi
+
+rm -rf /res/misc/cm9
+rm -rf /res/misc/cm10
+rm -rf /res/misc/jelly
+
+rm /init
+mv /innt /init
+cd /
+exec /init

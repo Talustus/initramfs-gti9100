@@ -17,7 +17,7 @@ tar xvf /res/misc/dev.tar
 
 if grep -q bootmode=2 /proc/cmdline ; then
   echo 0 > /proc/sys/kernel/rom_feature_set
-  mv /recovery.rc /init.rc
+  cp /recovery.rc /init.rc
   sed -i 's|found STOCK based System|Recovery BOOT|g' sbin/init.samsung
   exec /sbin/init.samsung
 fi
@@ -34,13 +34,15 @@ fi
 SECONDROM=1
 NOBOOTLOGO=0
 mount -t ext4 -o ro /dev/block/mmcblk0p12 /preload
-mount -t vfat /dev/block/mmcblk0p11 /mnt/sdcard
+mount -t vfat /dev/block/mmcblk0p11 /mnt/sdcard && ( touch /mnt/sdcard/clockworkmod/.nomedia )
+mount -t vfat /dev/block/mmcblk1p1 /mnt/emmc && ( touch /mnt/emmc/clockworkmod/.nomedia )
 [ -f /preload/build.prop ] || SECONDROM=0
 [ -f /mnt/sdcard/.secondrom/data.img ] || SECONDROM=0
 [ -f /mnt/sdcard/.secondrom/cache.img ] || SECONDROM=0
 [ -f /mnt/sdcard/.nobootlogo ] && NOBOOTLOGO=1 && SECONDROM=0
 umount /preload
 umount /mnt/sdcard
+umount /emmc
 
 if [[ "$NOBOOTLOGO" == "1" && "$SECONDROM" == "0" ]];then
   /sbin/choose_rom
@@ -66,6 +68,7 @@ AOSP=0
 MIUI=0
 B2G=0
 S4A=0
+CM10=0
 JELLY=0
 
 [ -d /system/b2g ] && B2G=1
@@ -83,23 +86,30 @@ JELLY=0
 [ "`/sbin/busybox grep -i =MIUI /system/build.prop`" ] && MIUI=1
 [ -f /system/framework/framework-miui.jar ] && MIUI=1
 [ -f /system/lib/ssl/engines/libkeystore.so ] && JELLY=1
+[ -f /system/framework/seccamera.jar ] || CM10=1
 
 
 ## JellyBean (4.1.1) Support
 if [ "$JELLY" == 1 ];
 then
-  echo 1 > /proc/sys/kernel/rom_feature_set
-  rm /sbin/init.samsung
-  mv /sbin/init.jb /sbin/init.samsung
+  if [ "$CM10" == 1 ];
+  then
+    echo 1 > /proc/sys/kernel/rom_feature_set
+    rm /sbin/init.samsung
+    mv /sbin/init.cm10 /sbin/init.samsung
+  else
+    echo 0 > /proc/sys/kernel/rom_feature_set
+    rm /sbin/init.samsung
+    mv /sbin/init.jelly /sbin/init.samsung
+  fi
 else
-
   ## B2G Support
   if [ "$B2G" == 1 ];
   then
     rm /init.rc
     rm /init.rc.2
-    mv /res/misc/init.b2g /init.rc
-    mv /res/misc/init.b2g.2 /init.rc.2
+    cp /res/misc/init.b2g /init.rc
+    cp /res/misc/init.b2g.2 /init.rc.2
     sed -i 's|STOCK|B2G|g' sbin/init.samsung
   fi;
 
@@ -108,7 +118,7 @@ else
   then
     echo 1 > /proc/sys/kernel/rom_feature_set
     rm /sbin/init.samsung
-    mv /sbin/init.cm /sbin/init.samsung
+    mv /sbin/init.cm9 /sbin/init.samsung
   else
     rm /init.smdk4210.rc.2
     echo 0 > /proc/sys/kernel/rom_feature_set
@@ -119,9 +129,9 @@ else
   then
     rm /init.rc
     rm /init.rc.2
-    mv /res/misc/init.miui /init.rc
-    mv /res/misc/init.miui.2 /init.rc.2
-    mv /res/misc/default.prop.miui /default.prop
+    cp /res/misc/init.miui /init.rc
+    cp /res/misc/init.miui.2 /init.rc.2
+    cp /res/misc/default.prop.miui /default.prop
     sed -i 's|STOCK|MIUI|g' sbin/init.samsung
   fi
 
@@ -130,8 +140,8 @@ else
   then
     rm /init.rc
     rm /init.rc.2
-    mv /res/misc/init.s4a /init.rc
-    mv /res/misc/init.s4a.2 /init.rc.2
+    cp /res/misc/init.s4a /init.rc
+    cp /res/misc/init.s4a.2 /init.rc.2
     sed -i 's|STOCK|Sense4All|g' sbin/init.samsung
   fi
 fi

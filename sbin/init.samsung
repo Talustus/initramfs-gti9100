@@ -9,8 +9,10 @@ then
   mv /init.rc.2 /init.rc 
 fi
 
-rm -rf /res/misc/cyano
-rm -rf /res/misc/jelly
+# rm -rf /res/misc/cm10
+# rm -rf /res/misc/cm9
+# rm -rf /res/misc/jelly
+
 rm /init
 mv /innt /init
 cd /

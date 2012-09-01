@@ -1,7 +1,7 @@
 #!/sbin/busybox sh
 
 BMODE=$1
-echo "found JellyBean/CM10 System, booting up Mode: $BMODE"
+echo "found CM10 System, booting up Mode: $BMODE"
 
 export _PATH="$PATH"
 export PATH=/sbin
@@ -22,17 +22,16 @@ rm /ueventd.smdk4210.rc
 rm /innt
 rm /init
 
-busybox cp -a /res/misc/jelly/* /
+busybox cp -a /res/misc/cm10/* /
 
 if [ "$BMODE" == "1" ];
 then
   echo "2ndROM Boot"
   rm /init.smdk4210.rc
   mv /init.smdk4210.rc.2 /init.smdk4210.rc
-  # mount -t vfat /dev/block/mmcblk0p11 /mnt/.secondrom
 fi
 
 busybox date >>/boot-log.txt
-busybox rm -fr /res/misc/jelly /dev/*
+busybox rm -fr /res/misc/cm10/ /dev/*
 export PATH="${_PATH}"
 exec /init
