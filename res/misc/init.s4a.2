@@ -8,6 +8,9 @@ on init
 # Vibetonz
     export VIBE_PIPE_PATH /dev/pipes
     mkdir /dev/pipes 0771 shell shell
+    mkdir /mnt/emmc 0775 system system
+    mkdir /mnt/sdcard 0775 system system
+    mkdir /mnt/usbdisk 0775 system system
 
 sysclktz 0
 

@@ -33,16 +33,15 @@ fi
 
 SECONDROM=1
 NOBOOTLOGO=0
+mkdir /mnt/sdcard
 mount -t ext4 -o ro /dev/block/mmcblk0p12 /preload
-mount -t vfat /dev/block/mmcblk0p11 /mnt/sdcard && ( touch /mnt/sdcard/clockworkmod/.nomedia )
-mount -t vfat /dev/block/mmcblk1p1 /mnt/emmc && ( touch /mnt/emmc/clockworkmod/.nomedia )
+mount -t vfat /dev/block/mmcblk0p11 /mnt/sdcard
 [ -f /preload/build.prop ] || SECONDROM=0
 [ -f /mnt/sdcard/.secondrom/data.img ] || SECONDROM=0
 [ -f /mnt/sdcard/.secondrom/cache.img ] || SECONDROM=0
 [ -f /mnt/sdcard/.nobootlogo ] && NOBOOTLOGO=1 && SECONDROM=0
 umount /preload
 umount /mnt/sdcard
-umount /emmc
 
 if [[ "$NOBOOTLOGO" == "1" && "$SECONDROM" == "0" ]];then
   /sbin/choose_rom

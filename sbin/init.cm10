@@ -23,6 +23,7 @@ rm /innt
 rm /init
 
 busybox cp -a /res/misc/cm10/* /
+rm -rf /mnt/sdcard
 
 if [ "$BMODE" == "1" ];
 then

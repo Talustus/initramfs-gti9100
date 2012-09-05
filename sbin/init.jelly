@@ -9,7 +9,9 @@ rm /init.rc
 rm /init.rc.2
 rm /init.smdk4210.rc
 rm /init.smdk4210.usb.rc
+
 cp -a /res/misc/jelly/* /
+rm -rf /mnt/sdcard
 
 if [ "$BMODE" == "1" ];
 then
