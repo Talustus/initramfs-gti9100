@@ -191,6 +191,9 @@
     <settingsPane description="Headphone Amplification Settings" name="Headphone Amplification">
 	<seekBar description="Headphone Amplifier Level (0-3 which corresponds to 0-1.5-3-6dB)"
 		name="Headphone Amplifier" action="soundgasm_hp" unit="" min="0" reversed="false" step="1" max="3"/>
+    <!-- Speaker SoundBoost -->
+	<seekBar description="Internal Speaker Volume Gain (value is in %)"
+		name="Speaker Amplifier" action="soundgasm_sp" unit="" min="-20" reversed="false" step="5" max="20"/>
     </settingsPane>
   </settingsTab>
 
@@ -233,8 +236,8 @@
 	<seekBar description="User adjustable gamma shift."
 		name="Gamma Shift" action="generic /sys/class/lcd/panel/user_gamma_adjust" unit="" min="-50" reversed="false" step="5" max="50"/>
        <!-- Vibration intensity level -->
-       <seekBar description="Vibration intensity level (default 6)" 
-		name="Vibration Intensity" action="generic /sys/devices/platform/tspdrv/vibrator_level" unit="" min="0" reversed="false" step="1" max="6"/>
+       <seekBar description="Vibration intensity level (default 75%)" 
+		name="Vibration Level" action="generic /sys/vibrator/pwm_val" unit="%" min="25" reversed="false" step="25" max="100"/>
     </settingsPane>
   </settingsTab>
 
@@ -346,11 +349,6 @@
              <spinnerItem name="BootMenu Disabled" value="0"/> 
        </spinner>
 <!--
-       <spinner description="This Setting enables/disables the installation of the IPv6Tun app on boot, if u do not want to use this App disable installation and remove the app from the Device" name="Enable IPv6Tun" action="ipv6tun_enabled">
-             <spinnerItem name="IPv6Tun Enabled" value="1"/> 
-             <spinnerItem name="IPv6Tun Disabled" value="0"/> 
-       </spinner>
-
 	<button description="Cleanup Kernel related files and Directories (logfiles etc...)" name="Kernel CleanUP" action="kernel-clean" label="Kernel CleanUP"/>
 -->
     </settingsPane>
