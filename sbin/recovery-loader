@@ -2,9 +2,7 @@
 
 mount -t rootfs -o remount,rw rootfs
 insmod /lib/modules/logger.ko
-ln -s /sbin/recovery /sbin/busybox
 
-ln -s /sbin/busybox /sbin/sh
 
 rm /emmc
 mkdir /emmc
