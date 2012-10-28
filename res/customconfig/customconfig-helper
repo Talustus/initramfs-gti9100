@@ -24,11 +24,13 @@ while read_dom; do
 action=$(echo $ENTITY |  grep -v \<button | sed -e 's/action=/\naction=/g' |grep action|awk -F'"' '{print $2}')
 if [ "a${action}" != a ];
 then
-  if [ "${action}" != "non-boot/scrcolor_reset 1" ];
+  if ([ "${action}" != "non-boot/scrcolor_reset 1" ] && [ "${action}" != "non-boot/reset-fuelgauge" ] && [ "${action}" != "non-boot/zramstats" ]);
   then
     actionval=`/res/uci.sh $action`
     echo applying: /res/uci.sh $action $actionval
     eval /res/uci.sh $action $actionval
+  else 
+    echo "Skipping: ${action} (non-boot)"
   fi
 fi
 done < $CONFIG_XML

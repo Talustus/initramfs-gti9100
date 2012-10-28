@@ -1,0 +1,32 @@
+#!/sbin/busybox sh
+#
+# Volume Gain implemention for Internal Speaker/HeadPhones/Mic
+# Kernel related code merged from sakuramilk
+# Extweaks implementation based on script by gokhanmoral!
+
+if [ "a$3" == "a" ]; 
+then
+  evalcmd='eval "echo \$vol_gain${2}"'
+  eval $evalcmd
+else
+  evalcmd='eval "vol_gain${2}=${3}"'
+  eval $evalcmd
+  evalcmd='eval "echo \$vol_gain${2}"'
+  eval $evalcmd
+fi
+
+if [ -d /sys/devices/virtual/sound/sound_mc1n2/ ]; then
+  ## Headphone Volume gain Control.
+  echo "${vol_gainHP}" > /sys/devices/virtual/sound/sound_mc1n2/AVOL_HP;
+  # echo "1" > /sys/devices/virtual/sound/sound_mc1n2/update_volume;
+  ## MIC Volume gain Control.
+  echo "${vol_gainMC}" > /sys/devices/virtual/sound/sound_mc1n2/AVOL_MIC1;
+  echo "${vol_gainMC}" > /sys/devices/virtual/sound/sound_mc1n2/AVOL_MIC2;
+  echo "${vol_gainMC}" > /sys/devices/virtual/sound/sound_mc1n2/AVOL_RC;
+  # echo "1" > /sys/devices/virtual/sound/sound_mc1n2/update_volume;
+  ## Speaker Volume gain Control.
+  echo "${vol_gainSP}" > /sys/devices/virtual/sound/sound_mc1n2/AVOL_SP;
+  echo "1" > /sys/devices/virtual/sound/sound_mc1n2/update_volume;
+else
+  echo "SYSFS Error occoured"
+fi

@@ -57,10 +57,12 @@ mdnie_shortcut_enabled=on
 negative_screen=1
 cfs_tweaks=1
 soundgasm_hp=0
-soundgasm_sp=0
+vol_gainHP=0
+vol_gainSP=0
+vol_gainMC=0
 bootmenu_enabled=1
 zram_size=0
-user_cb=137
-user_cr=120
+user_cb=132
+user_cr=122
 mali_touch_boost_level=2
 

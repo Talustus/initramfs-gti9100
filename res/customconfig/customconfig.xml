@@ -10,6 +10,7 @@
 		<spinnerItem name="ondemand" value="ondemand"/>
 		<spinnerItem name="conservative" value="conservative"/>
 		<spinnerItem name="lulzactive" value="lulzactive"/>
+		<spinnerItem name="lulzactiveq" value="lulzactiveq"/>
 		<spinnerItem name="smartassV2" value="smartassV2"/>
 		<spinnerItem name="interactive" value="interactive"/>
 		<spinnerItem name="lagfree" value="lagfree"/>
@@ -187,13 +188,19 @@
 
   <!-- Audio Settings -->
   <settingsTab name="Audio">
+    <settingsPane description="Sound Amplification Settings" name="Headphone Amplification">
     <!-- Headphone SoundBoost -->
-    <settingsPane description="Headphone Amplification Settings" name="Headphone Amplification">
 	<seekBar description="Headphone Amplifier Level (0-3 which corresponds to 0-1.5-3-6dB)"
 		name="Headphone Amplifier" action="soundgasm_hp" unit="" min="0" reversed="false" step="1" max="3"/>
-    <!-- Speaker SoundBoost -->
-	<seekBar description="Internal Speaker Volume Gain (value is in %)"
-		name="Speaker Amplifier" action="soundgasm_sp" unit="" min="-20" reversed="false" step="5" max="20"/>
+    <!-- Headphone Volume Gain Control -->
+	<seekBar description="HeadPhone Volume Gain Control (MAX:20 MIN:-20, value is in %), too much oversizing of this value over a long period may can damage your Headphones!"
+		name="HeadPhone Volume Gain" action="vol_gain HP" unit="" min="-20" reversed="false" step="4" max="20"/>
+    <!-- Speaker Volume Gain Control -->
+	<seekBar description="Speaker Volume Gain Control (MAX:15 MIN:-15, value is in %), too much oversizing of this value over a long period may can damage your Internal Speaker!"
+		name="Speaker Volume Gain" action="vol_gain SP" unit="" min="-15" reversed="false" step="3" max="15"/>
+    <!-- Microphone Volume Gain Control -->
+	<seekBar description="Microphone Volume Gain Control (MAX:10 MIN:-10, value is in %), too much oversizing of this value over a long period may can damage your Internal Microphones!"
+		name="Micro Volume Gain" action="vol_gain MC" unit="" min="-10" reversed="false" step="2" max="10"/>
     </settingsPane>
   </settingsTab>
 
@@ -213,9 +220,9 @@
 
     <!-- Screen Color Settings -->
     <settingsPane description="User definied Screen Color Settings" name="Manual Screen Color Settings">
-	<seekBar description="Sets screen BLUE color scale (Default is 137)" 
+	<seekBar description="Sets screen BLUE color scale (Default is 132)"
 		name="Blue Color Scale" action="generic /sys/devices/platform/samsung-pd.2/mdnie/mdnie/mdnie/user_cb" unit="" min="0" reversed="false" step="1" max="244"/>
-	<seekBar description="Sets screen RED color scale (Default is 120)" 
+	<seekBar description="Sets screen RED color scale (Default is 122)"
 		name="Red Color Scale" action="generic /sys/devices/platform/samsung-pd.2/mdnie/mdnie/mdnie/user_cr" unit="" min="0" reversed="false" step="1" max="244"/>
 	<button description="Push to reset screen color to default (This will force Extweaks to Restart)" name="Reset Color to Default" action="non-boot/scrcolor_reset 1" label="Default Color"/>
 
@@ -318,7 +325,7 @@
       <!-- Exclusive WakeLock Stats -->
       <checkbox description="If checked, BetterBatteryStatus will report exclusive (non-overlapping) wakelock statistics." name="Exclusive Wakelock Stats" action="generic01 /sys/module/wakelock/parameters/default_stats" label="Exclusive Wakelock Stats"/>
       <!-- Full gauge chip reset -->
-      <button description="If you think that the fuel gauge chip is behaving weird use this button to reset it. Give it a few hours after you reset the gauge. It may still show you funny values for those period, then the battery percentage should be fine." name="Reset Fuel-Gauge Chip" action="reset-fuelgauge" label="Reset Fuel-Gauge Chip"/>
+      <button description="If you think that the fuel gauge chip is behaving weird use this button to reset it. Give it a few hours after you reset the gauge. It may still show you funny values for those period, then the battery percentage should be fine." name="Reset Fuel-Gauge Chip" action="non-boot/reset-fuelgauge" label="Reset Fuel-Gauge Chip"/>
 
       <!-- EXPERIMENTAL: zRam support (gokhanmoral) -->
       <spinner description="ZRAM (Compressed swap space) size (This is a Experimental feature)" name="ZRAM Size" action="zram">
