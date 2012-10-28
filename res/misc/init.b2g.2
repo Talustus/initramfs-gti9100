@@ -113,6 +113,7 @@ on fs
     # Mount /system rw first to give the filesystem a chance to save a checkpoint
     mount ext4 /res/dev/system /system noatime wait rw
     chmod 0755 /system/b2g/b2g
+    chmod 0755 /system/b2g/plugin-container
     chmod 0755 /system/b2g/updater
 
     # verify filesystem (UMS)
@@ -599,7 +600,7 @@ on boot
 #    chmod 0770 /data/dvfs
 
 # Set this property so surfaceflinger is not started by system_init
-    setprop system_init.startsurfaceflinger 0
+    # setprop system_init.startsurfaceflinger 0
 
     class_start core
     class_start main
@@ -713,11 +714,21 @@ on property:service.adb.root=1
     restart adbd
     write /sys/class/android_usb/android0/enable 1
 
-service servicemanager /system/bin/servicemanager
+service servicemanager-g /system/bin/servicemanager
     class core
     user system
     group system
     critical
+    disabled
+
+service servicemanager-a /system/bin/servicemanager
+    class core
+    user system
+    group system
+    critical
+    onrestart restart zygote
+    onrestart restart media
+    disabled
 
 service vold /system/bin/vold
     class core
@@ -777,7 +788,7 @@ service media /system/bin/mediaserver
     group system audio camera inet net_bt net_bt_admin
     ioprio rt 4
 
-service samsungani /sbin/bootanimation.sh
+service samsungani /system/bin/samsungani
     class main
     user graphics
     group graphics
