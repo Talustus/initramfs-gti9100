@@ -73,9 +73,11 @@ echo "1" > /sys/devices/platform/samsung-pd.2/mdnie/mdnie/mdnie/user_mode
 
 ## for ntfs automounting
 # insmod /lib/modules/fuse.ko
+mount -o remount,rw /
 mkdir /mnt/ntfs
 mount -t tmpfs tmpfs /mnt/ntfs
 chmod 777 /mnt/ntfs
+mount -o remount,ro /
 
 /sbin/busybox sh /sbin/ext/properties.sh
 
