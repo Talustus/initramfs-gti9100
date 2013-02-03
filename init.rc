@@ -222,6 +222,12 @@ on post-fs-data
     mkdir /data/drm 0770 drm drm
 
 #[ SEC_MM_DRM
+    # [ save OMA DB, when upgrading from GB to UPGRADE
+    mkdir /data/system/databases 0771 system system
+    copy /data/data/com.sec.android.providers.drm/databases/drmdatabase.db /data/system/databases/drmdatabase.db
+    chown system system /data/system/databases/drmdatabase.db
+    chmod 0774 /data/system/databases/drmdatabase.db
+    # ]
     # DRM directory creation
     mkdir /system/etc/security/.drm 0775
     chown root root /system/etc/security/.drm
@@ -260,6 +266,8 @@ on post-fs-data
     #setprop vold.post_fs_data_done 1
 
 on boot
+    mount debugfs /sys/kernel/debug /sys/kernel/debug
+
 # basic network init
     ifup lo
     hostname localhost
@@ -417,6 +425,9 @@ on boot
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
     setprop net.tcp.buffersize.evdo_b  4094,87380,262144,4096,16384,262144
 
+# permission for HDMI audio path
+    chown media audio /sys/class/hdmi_audio/hdmi_audio/hdmi_audio_set_ext
+
 # Set this property so surfaceflinger is not started by system_init
     setprop system_init.startsurfaceflinger 0
 
@@ -573,7 +584,7 @@ service drm /system/bin/drmserver
 service media /system/bin/mediaserver
     class main
     user media
-    group system audio camera inet net_bt net_bt_admin net_bw_acct drmrpc sdcard_rw sdcard_r media_rw
+    group system audio camera inet net_bt net_bt_admin net_bw_acct drmrpc sdcard_rw sdcard_r media_rw lgt_gid graphics
     ioprio rt 4
 
 service powersnd /system/bin/samsungpowersoundplay

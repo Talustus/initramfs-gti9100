@@ -30,6 +30,7 @@ on early-init
 
 on init
 # ko files for FM Radio
+insmod /lib/modules/ffu.ko
 insmod /lib/modules/Si4709_driver.ko
 
 # Vibetonz
@@ -85,7 +86,8 @@ on boot
 
 # mobicore
     mkdir /data/app/mcRegistry 0775 system system
-    chmod 0777 /dev/mobicore
+    chmod 0660 /dev/mobicore
+    chown radio system /dev/mobicore
 # mobicore trustlets
     copy /efs/00000000.authtokcont /data/app/mcRegistry/00000000.authtokcont
     chown system system /data/app/mcRegistry/00000000.authtokcont
@@ -106,7 +108,7 @@ on boot
 
 # S.LSI secdrv mem
     chown system system /dev/s5p-smem
-    chmod 0775 /dev/s5p-smem
+    chmod 0660 /dev/s5p-smem
 
 # WIFI
     setprop wifi.interface wlan0
@@ -147,6 +149,16 @@ on fs
     mount_all /fstab.smdk4210
     setprop ro.crypto.fuse_sdcard false
 
+# for LogMeIn
+    mount ext4 /dev/block/mmcblk0p9 /system rw wait noatime remount
+
+    chown graphics /system/bin/RescueStarter
+    chmod 0755 /system/bin/RescueStarter
+    chown graphics /system/bin/RescueServer
+    chmod 0755 /system/bin/RescueServer
+
+    mount ext4 /dev/block/mmcblk0p9 /system ro wait noatime remount
+
 # Permissions for backlight
     chown system system /sys/class/backlight/panel/brightness
     chown system system /sys/class/sec/sec_touchkey/brightness
@@ -181,6 +193,9 @@ on fs
     setprop ro.nfc.port "I2C"
     chmod 0600 /dev/pn544
     chown nfc nfc /dev/pn544
+
+# Permissions for FuelGauge
+    chown system radio /sys/class/power_supply/fuelgauge/fg_reset_soc
 
 # Permissions for LCD
     chown system radio /sys/class/lcd/panel/lcd_type
@@ -367,3 +382,8 @@ service dvfs /system/bin/sh /system/bin/dvfs.sh
     oneshot
 
 
+## for LogMeIn
+service RescueStarter /system/bin/RescueStarter
+    class core
+    user graphics
+    group input graphics
