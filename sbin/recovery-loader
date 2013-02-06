@@ -1,0 +1,27 @@
+#!/sbin/busybox sh
+
+mount -t rootfs -o remount,rw rootfs
+# insmod /lib/modules/logger.ko
+
+rm /etc
+mkdir /etc
+cat /res/etc/recovery.fstab > /etc/recovery.fstab
+cat /res/etc/mke2fs.conf > /etc/mke2fs.conf
+
+stop tvout
+
+cd /
+#eval $(/sbin/read_boot_headers /dev/block/mmcblk0p5)
+#dd bs=512 if=/dev/block/mmcblk0p5 skip=$recovery_offset count=$recovery_len | xzcat | tar x
+
+#if /sbin/busybox [ -f /cache/recovery/command ];
+#then
+#   /sbin/busybox cp /res/keys-samsung /res/keys
+#   recovery-samsung
+#else
+#  echo 1 > /sbin/recovery-is-running
+#  recovery
+#fi;
+
+echo 1 > /sbin/recovery-is-running
+recovery
