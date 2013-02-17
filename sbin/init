@@ -16,6 +16,7 @@ echo "ENV-PATH: $PATH"
 
 if grep -q bootmode=2 /proc/cmdline; then
   echo "Booting Recovery Mode ..."
+  echo 0 > /proc/sys/kernel/rom_feature_set
   cp /recovery.rc /init.rc
   rm /init
   mv /innt /init
@@ -24,6 +25,7 @@ fi
 
 if grep -q 1 /sys/class/power_supply/battery/batt_lp_charging; then
   echo "Booting low power mode ..."
+  echo 0 > /proc/sys/kernel/rom_feature_set
   cp /lpm.rc /init.rc
   rm /init.smdk4210.rc
   rm /init
@@ -32,6 +34,7 @@ if grep -q 1 /sys/class/power_supply/battery/batt_lp_charging; then
 fi
 
 echo "Booting normal System Mode ..."
+# echo 0 > /proc/sys/kernel/rom_feature_set
 rm /init
 mv /innt /init
 exec /init

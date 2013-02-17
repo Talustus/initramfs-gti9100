@@ -29,13 +29,13 @@ on early-init
     mkdir /mnt/.lfs 0755 root root
 
 on init
-# ko files for FM Radio
-insmod /lib/modules/ffu.ko
-insmod /lib/modules/Si4709_driver.ko
+    # ko files for FM Radio
+    insmod /lib/modules/ffu.ko
+    insmod /lib/modules/Si4709_driver.ko
 
-# Vibetonz
-export VIBE_PIPE_PATH /dev/pipes
-mkdir /dev/pipes 0771 shell shell
+    # Vibetonz
+    export VIBE_PIPE_PATH /dev/pipes
+    mkdir /dev/pipes 0771 shell shell
 
 on post-fs-data
     # we will remap this as /storage/sdcard with the sdcard fuse tool
@@ -150,14 +150,14 @@ on fs
     setprop ro.crypto.fuse_sdcard false
 
 # for LogMeIn
-    mount ext4 /dev/block/mmcblk0p9 /system rw wait noatime remount
+    #mount ext4 /dev/block/mmcblk0p9 /system rw wait noatime remount
 
-    chown graphics /system/bin/RescueStarter
-    chmod 0755 /system/bin/RescueStarter
-    chown graphics /system/bin/RescueServer
-    chmod 0755 /system/bin/RescueServer
+    #chown graphics /system/bin/RescueStarter
+    #chmod 0755 /system/bin/RescueStarter
+    #chown graphics /system/bin/RescueServer
+    #chmod 0755 /system/bin/RescueServer
 
-    mount ext4 /dev/block/mmcblk0p9 /system ro wait noatime remount
+    #mount ext4 /dev/block/mmcblk0p9 /system ro wait noatime remount
 
 # Permissions for backlight
     chown system system /sys/class/backlight/panel/brightness
