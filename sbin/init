@@ -1,0 +1,34 @@
+#!/sbin/busybox sh
+#
+cd /
+
+busybox mount -t proc proc /proc
+busybox mount -t sysfs sysfs /sys
+
+######################
+## Enable Logging?? ##
+mv /boot-log.txt /boot-log.bak
+busybox date >/boot-log.txt
+exec >>/boot-log.txt 2>&1
+#
+echo "ENV-PATH: $PATH"
+echo "Starting System ..."
+
+if grep -q bootmode=2 /proc/cmdline ; then
+  # Recovery mode
+  echo "Booting into Recovery Mode"
+  rm /init.rc
+  cp /recovery.rc /init.rc
+fi
+
+if grep -q 1 /sys/class/power_supply/battery/batt_lp_charging ; then
+  # low power mode
+  echo "Booting into Low Power Mode"
+  rm /init.rc
+  cp /lpm.rc /init.rc
+  rm /init.smdk4210.rc
+fi
+
+rm /init
+mv /innt /init
+exec /init
